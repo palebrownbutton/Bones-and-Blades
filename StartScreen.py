@@ -337,7 +337,7 @@ back_arrow = StillImage(5, 10, 90, 90, "back_arrow.png")
 
 benefits = []
 for i in range(3):
-    benefit = StillImage(62 + (i * 250), 470, 175, 175, "benefits_button.png")
+    benefit = StillImage(62 + (i * 250), 470, 175, 175, "yes_benefits_button.png")
     benefits.append(benefit)
 
 def recalc_upgrade_text():
@@ -368,6 +368,30 @@ def upgrade_menu(window):
     window.blit(overlay2, rect2.topleft)
     window.blit(overlay3, rect3.topleft)
 
+    for idx, benefit in enumerate(benefits):
+            
+        if idx == 0:
+            cost = strength_required_xp
+        elif idx == 1:
+            cost = hp_required_xp
+        else:
+            cost = lives_rate_required_xp
+        
+        if cost <= total_xp:
+            benefit.set_image("yes_benefits_button.png")
+        else:
+            benefit.set_image("no_benefits_button.png")
+        benefit.draw(window)
+
+        if cost <= total_xp and(mouse_x >= benefit.rect.x and mouse_x <= benefit.rect.x + benefit.rect.width and mouse_y >= benefit.rect.y and mouse_y <= benefit.rect.y + benefit.rect.height) and mouse.get_pressed()[0]:
+            total_xp -= cost
+            if idx == 0:
+                strength_upgrade_level += 1
+            elif idx == 1:
+                hp_upgrade_level += 1
+            else:
+                lives_rate_upgrade_level += 1
+
     rendered_total_xp_text.draw(window, (615, 10))
 
     rendered_hp_text.draw(window, (350, 330))
@@ -381,9 +405,6 @@ def upgrade_menu(window):
     hp_icon.draw(window)
     lives_rate_icon.draw(window)
 
-    for benefit in benefits:
-        benefit.draw(window)
-
     rendered_hp_upgrade_level_text.draw(window, (310, 430))
     rendered_strength_upgrade_level_text.draw(window, (60, 430))
     rendered_lives_rate_upgrade_level_text.draw(window, (560, 430))
@@ -396,30 +417,7 @@ def upgrade_menu(window):
         if mouse.get_pressed()[0]:
             global click_cooldown
             click_cooldown = True
-            return False
-        
-    for benefit in benefits:
-            
-        if (mouse_x >= benefit.rect.x and mouse_x <= benefit.rect.x + benefit.rect.width and mouse_y >= benefit.rect.y and mouse_y <= benefit.rect.y + benefit.rect.height):
-            if strength_required_xp <= total_xp:
-                if mouse.get_pressed()[0]:
-                    total_xp -= strength_required_xp  
-                    strength_upgrade_level += 1
-                    recalc_upgrade_text()
-
-        if (mouse_x >= benefit.rect.x and mouse_x <= benefit.rect.x + benefit.rect.width and mouse_y >= benefit.rect.y and mouse_y <= benefit.rect.y + benefit.rect.height):
-            if hp_required_xp <= total_xp:
-                if mouse.get_pressed()[0]:
-                    total_xp -= hp_required_xp  
-                    hp_upgrade_level += 1
-                    recalc_upgrade_text()
-
-        if (mouse_x >= benefit.rect.x and mouse_x <= benefit.rect.x + benefit.rect.width and mouse_y >= benefit.rect.y and mouse_y <= benefit.rect.y + benefit.rect.height):
-            if lives_rate_required_xp <= total_xp:
-                if mouse.get_pressed()[0]:
-                    total_xp -= lives_rate_required_xp  
-                    lives_rate_upgrade_level += 1
-                    recalc_upgrade_text()
+            return False        
 
     data[1]["upgrade_level"]["hp_upgrade"] = hp_upgrade_level
     data[1]["upgrade_level"]["strength_upgrade"] = strength_upgrade_level

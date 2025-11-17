@@ -5,11 +5,17 @@ class StillImage:
 
     def __init__(self, x, y, w, h, filename):
 
+        self.filename = filename
         self.image = image.load(filename)
         self.image = transform.scale(self.image, (w, h))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+    def set_image(self, filename):
+        
+        self.filename = filename
+        self.image = transform.scale(image.load(filename), (self.rect.width, self.rect.height))
 
     def draw(self, window):
         window.blit(self.image, (self.rect.x, self.rect.y))
