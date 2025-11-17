@@ -168,10 +168,14 @@ scorepic = StillImage(0, 10, 140, 140, "score.png")
 last_spawn_time = time.get_ticks()
 archer_spawn_time = time.get_ticks()
 game_start_time = None
+
 heart_spawn_time = time.get_ticks()
+with open ("upgrades.json") as file:
+    data = json.load(file)[1]
+    lives_rate = data["upgrade_level"]["life_spawn_time_upgrade"]
 
 try:
-    with open("highscore.txt", "r") as file:
+    with open ("highscore.txt", "r") as file:
         lines = file.readlines()
         numbers = [int(line.strip()) for line in lines if line.strip().isdigit()]
     highscore = max(numbers) if numbers else 0
@@ -294,7 +298,7 @@ while True:
 
                 current_time = time.get_ticks() - paused_time
 
-                if current_time - heart_spawn_time > 60000 and len(hearts) < 5:
+                if current_time - heart_spawn_time > (60000 * (1.0 - (lives_rate * 0.04))) and len(hearts) < 5:
                     heart_spawn_time = current_time
                     new_heart = StillImage(random.randint(-117, 710), random.choice([600, 715]), 45, 45, "hearts.png")
                     collectibles.append({

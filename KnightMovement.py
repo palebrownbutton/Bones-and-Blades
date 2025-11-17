@@ -9,14 +9,14 @@ class Knight(AnimatedSprite):
         self.knight_number = knight_number
 
         with open ("upgrades.json", "r") as file:
-            attributes = json.load(file)[0]
+            attributes = json.load(file)
 
         self.velocity_y = 0
         self.on_ground = True
         self.attacking = False
         self.defending = False
-        self.hp = attributes["hp"]
-        self.strength = attributes["strength"]
+        self.hp = attributes[0]["hp"] * float(f"1.{(attributes[1]['upgrade_level']['hp_upgrade']) - 1}")
+        self.strength = attributes[0]["strength"] * float(f"1.{(attributes[1]['upgrade_level']['strength_upgrade']) - 1}")
         self.dead = False
         self.took_damage = False
 
