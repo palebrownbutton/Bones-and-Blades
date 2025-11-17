@@ -9,9 +9,9 @@
         "upgrade_level": {
             "hp_upgrade": 1,
             "strength_upgrade": 1,
-            "life_spawn_time_upgrade": 1 
+            "life_spawn_time_upgrade": 1
         },
-        "required_xp":{
+        "required_xp": {
             "hp_required_xp": [
                 150,
                 230,
@@ -35,7 +35,7 @@
                 3550,
                 4200,
                 5000
-                ],
+            ],
             "lives_spawn_time_required_xp": [
                 50,
                 120,
@@ -47,7 +47,7 @@
                 4500,
                 5900,
                 7000
-                ]
+            ]
         }
     }
 ]

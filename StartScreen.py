@@ -320,9 +320,9 @@ with open ("upgrades.json", "r") as file:
     hp_upgrade_level = data[1]["upgrade_level"]["hp_upgrade"]
     strength_upgrade_level = data[1]["upgrade_level"]["strength_upgrade"]
     lives_rate_upgrade_level = data[1]["upgrade_level"]["life_spawn_time_upgrade"]
-    hp_required_xp = data[1]["required_xp"]["hp_required_xp"][hp_upgrade_level]
-    strength_required_xp = data[1]["required_xp"]["strength_required_xp"][strength_upgrade_level]
-    lives_rate_required_xp = data[1]["required_xp"]["lives_spawn_time_required_xp"][lives_rate_upgrade_level]
+    hp_required_xp = data[1]["required_xp"]["hp_required_xp"][hp_upgrade_level - 1]
+    strength_required_xp = data[1]["required_xp"]["strength_required_xp"][strength_upgrade_level - 1]
+    lives_rate_required_xp = data[1]["required_xp"]["lives_spawn_time_required_xp"][lives_rate_upgrade_level - 1]
 
 rendered_total_xp_text = TextRender(None, 60, (255, 255, 255), f"XP: {total_xp}")
 
@@ -340,7 +340,23 @@ for i in range(3):
     benefit = StillImage(62 + (i * 250), 470, 175, 175, "benefits_button.png")
     benefits.append(benefit)
 
+def recalc_upgrade_text():
+    global hp_required_xp, strength_required_xp, lives_rate_required_xp, rendered_hp_upgrade_level_text, rendered_strength_upgrade_level_text, rendered_lives_rate_upgrade_level_text, rendered_hp_required_xp_text, rendered_strength_required_xp_text, rendered_lives_rate_required_xp_text
+
+    hp_required_xp = data[1]["required_xp"]["hp_required_xp"][hp_upgrade_level - 1]
+    strength_required_xp = data[1]["required_xp"]["strength_required_xp"][strength_upgrade_level - 1]
+    lives_rate_required_xp = data[1]["required_xp"]["lives_spawn_time_required_xp"][lives_rate_upgrade_level - 1]
+
+    rendered_hp_upgrade_level_text = TextRender(None, 50, (255,255,255), f"Level: {hp_upgrade_level}/10")
+    rendered_strength_upgrade_level_text = TextRender(None, 50, (255,255,255), f"Level: {strength_upgrade_level}/10")
+    rendered_lives_rate_upgrade_level_text = TextRender(None, 50, (255,255,255), f"Level: {lives_rate_upgrade_level}/10")
+
+    rendered_hp_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{hp_required_xp}")
+    rendered_strength_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{strength_required_xp}")
+    rendered_lives_rate_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{lives_rate_required_xp}")
+
 def upgrade_menu(window):
+    global hp_upgrade_level, strength_upgrade_level, lives_rate_upgrade_level, hp_required_xp, strength_required_xp, lives_rate_required_xp, rendered_total_xp_text, data, total_xp
 
     mouse_x, mouse_y = mouse.get_pos()
 
@@ -377,10 +393,48 @@ def upgrade_menu(window):
     rendered_lives_rate_required_xp_text.draw(window, (659, 549)) 
 
     if (mouse_x >= back_arrow.rect.x and mouse_x <= back_arrow.rect.x + back_arrow.rect.width and mouse_y >= back_arrow.rect.y and mouse_y <= back_arrow.rect.y + back_arrow.rect.height):
-            if mouse.get_pressed()[0]:
-                global click_cooldown
-                click_cooldown = True
-                return False
+        if mouse.get_pressed()[0]:
+            global click_cooldown
+            click_cooldown = True
+            return False
+        
+    for benefit in benefits:
+            
+        if (mouse_x >= benefit.rect.x and mouse_x <= benefit.rect.x + benefit.rect.width and mouse_y >= benefit.rect.y and mouse_y <= benefit.rect.y + benefit.rect.height):
+            if strength_required_xp <= total_xp:
+                if mouse.get_pressed()[0]:
+                    total_xp -= strength_required_xp  
+                    strength_upgrade_level += 1
+                    recalc_upgrade_text()
+
+        if (mouse_x >= benefit.rect.x and mouse_x <= benefit.rect.x + benefit.rect.width and mouse_y >= benefit.rect.y and mouse_y <= benefit.rect.y + benefit.rect.height):
+            if hp_required_xp <= total_xp:
+                if mouse.get_pressed()[0]:
+                    total_xp -= hp_required_xp  
+                    hp_upgrade_level += 1
+                    recalc_upgrade_text()
+
+        if (mouse_x >= benefit.rect.x and mouse_x <= benefit.rect.x + benefit.rect.width and mouse_y >= benefit.rect.y and mouse_y <= benefit.rect.y + benefit.rect.height):
+            if lives_rate_required_xp <= total_xp:
+                if mouse.get_pressed()[0]:
+                    total_xp -= lives_rate_required_xp  
+                    lives_rate_upgrade_level += 1
+                    recalc_upgrade_text()
+
+    data[1]["upgrade_level"]["hp_upgrade"] = hp_upgrade_level
+    data[1]["upgrade_level"]["strength_upgrade"] = strength_upgrade_level
+    data[1]["upgrade_level"]["life_spawn_time_upgrade"] = lives_rate_upgrade_level
+    data[1]["total_xp"] = total_xp
+    with open("upgrades.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+    with open("upgrades.json", "r") as file:
+        data = json.load(file)
+        total_xp = data[1]["total_xp"]
+
+    recalc_upgrade_text()
+    rendered_total_xp_text = TextRender(None, 60, (255, 255, 255), f"XP: {total_xp}")
+
 
     return True
 

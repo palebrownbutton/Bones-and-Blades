@@ -188,7 +188,7 @@
       false
     ],
     "objectives": {
-      "rightDefeated": 3,
+      "rightDefeated": 0,
       "requiredRight": [
         10,
         50
