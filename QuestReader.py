@@ -60,7 +60,7 @@ archer_current_wave = 0
 
 xp = 0
 
-def quest_update(enemy_type, direction, wave, current_archers, current_skeletons, hearts):
+def quest_update(enemy_type, direction, wave, current_archers, current_skeletons, lost_a_heart):
 
     global quest, quests_levels, skeleton_current_wave, archer_current_wave, xp
 
@@ -95,8 +95,8 @@ def quest_update(enemy_type, direction, wave, current_archers, current_skeletons
                     gained_xp = True
 
         if wave is not None and "wavesDefeated" in quest["objectives"]:
-            quest["objectives"]["wavesDefeated"] += 1
             if quest_id == 5:
+                quest["objectives"]["wavesDefeated"] += 1
                 if quest["objectives"]["wavesDefeated"] > quest["objectives"]["requiredWaves"][quest_level.level]:
                     quest["isCompleted"][quest_level.level] = True
                     gained_xp = True
@@ -122,12 +122,25 @@ def quest_update(enemy_type, direction, wave, current_archers, current_skeletons
                     quest["isCompleted"][quest_level.level] = True
                     gained_xp = True
 
-        # if hearts == False and quest_id == 9:
-        #     if quest["objectives"]["requiredWaves"][quest_level.level] >= quest["objectives"]["wavesDefeated"]:
-        #         quest["isCompleted"][quest_level.level] = True
-        #         gained_xp = True
-        # elif hearts == True and quest_id == 9:
-        #     quest["objectives"]["wavesDefeated"] = 0
+        if quest_id == 9:
+
+            if wave is not None:
+                if not getattr(quest_level, "wave_in_progress", False):
+                    quest_level.wave_in_progress = True
+                    quest_level.lost_heart_this_wave = False
+
+                if lost_a_heart:
+                    quest_level.lost_heart_this_wave = True
+
+            if wave is None and getattr(quest_level, "wave_in_progress", False):
+                quest_level.wave_in_progress = False
+      
+                if not quest_level.lost_heart_this_wave:
+                    quest["objectives"]["wavesDefeated"] += 1
+
+                    if quest["objectives"]["wavesDefeated"] >= quest["objectives"]["requiredWaves"][quest_level.level]:
+                        quest["isCompleted"][quest_level.level] = True
+                        gained_xp = True
 
         if gained_xp and not quest_level.has_given_xp[quest_level.level]:
             xp += quest["reward"]["xp"][quest_level.level]
