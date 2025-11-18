@@ -575,7 +575,7 @@ while True:
                                 if knight.hp <= 0:
                                     lives -= 1
                                     lost_a_heart = True
-                                    quest_update(None, None, wave, current_archers, current_skeletons, lost_a_heart)
+                                    quest_update(None, None, wave, current_archers, current_skeletons, lost_a_heart, current_warriors)
                                     try:
                                         hearts.remove(hearts[-1])
                                     except Exception:
@@ -689,7 +689,7 @@ while True:
                                             if knight.hp <= 0:
                                                 lives -= 1
                                                 lost_a_heart = True
-                                                quest_update(None, None, wave, current_archers, current_skeletons, lost_a_heart)
+                                                quest_update(None, None, wave, current_archers, current_skeletons, lost_a_heart, current_warriors)
                                                 try:
                                                     hearts.remove(hearts[-1])
                                                 except Exception:
@@ -772,7 +772,7 @@ while True:
                                     if knight.hp <= 0:
                                         lives -= 1
                                         lost_a_heart = True
-                                        quest_update(None, None, wave, current_archers, current_skeletons, lost_a_heart)
+                                        quest_update(None, None, wave, current_archers, current_skeletons, lost_a_heart, current_warriors)
                                         try:
                                             hearts.remove(hearts[-1])
                                         except Exception:

@@ -53,7 +53,7 @@
       false
     ],
     "objectives": {
-      "skeletonsDefeated": 10,
+      "skeletonsDefeated": 16,
       "requiredSkeletons": [
         1,
         10,
@@ -149,15 +149,15 @@
       ]
     },
     "isCompleted": [
-      false,
+      true,
       false
     ],
     "has_give_xp": [
-      false,
+      true,
       false
     ],
     "objectives": {
-      "leftDefeated": 8,
+      "leftDefeated": 10,
       "requiredLeft": [
         10,
         50
@@ -188,7 +188,7 @@
       false
     ],
     "objectives": {
-      "rightDefeated": 2,
+      "rightDefeated": 6,
       "requiredRight": [
         10,
         50
@@ -224,7 +224,7 @@
       false
     ],
     "objectives": {
-      "wavesDefeated": 0,
+      "wavesDefeated": 1,
       "requiredWaves": [
         3,
         10,
@@ -316,8 +316,8 @@
       false
     ],
     "objectives": {
-      "rightDefeated": 2,
-      "leftDefeated": 8,
+      "rightDefeated": 6,
+      "leftDefeated": 10,
       "requiredRight": [
         5,
         15
@@ -406,7 +406,7 @@
       "warriorDefeated": 0,
       "requiredWarriors": [
         1,
-        10, 
+        10,
         25,
         50,
         100,
@@ -423,7 +423,7 @@
       "Kill only warriors for one full wave",
       "Kill only warriors for 3 waves"
     ],
-     "reward": {
+    "reward": {
       "xp": [
         600,
         1500

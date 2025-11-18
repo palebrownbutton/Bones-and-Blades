@@ -11,6 +11,7 @@ can_shoot = False
 
 current_archers = 0
 current_skeletons = 0
+current_warriors = 0
 
 class Enemy(AnimatedSprite):
 
@@ -75,7 +76,7 @@ class Enemy(AnimatedSprite):
         return Rect(hb_x, hb_y, hb_w, hb_h)
 
     def die(self, enemy_type, new_wave, current_lives):
-        global current_archers, current_skeletons
+        global current_archers, current_skeletons, current_warriors
 
         if getattr(self, "dead", False):
             return
@@ -85,10 +86,12 @@ class Enemy(AnimatedSprite):
             current_skeletons = 0
         if enemy_type == "Skeleton_Archer":
             current_archers += 1
-        else:
+        elif enemy_type == "Skeleton_Spearman":
             current_skeletons += 1
+        else:
+            current_warriors += 1
 
-        quest_update(enemy_type, self.start_direction, None, current_archers, current_skeletons, current_lives)
+        quest_update(enemy_type, self.start_direction, None, current_archers, current_skeletons, current_lives, current_warriors)
         
         self.hp = max(0, self.hp)
 
