@@ -2,9 +2,8 @@ from StillImage import *
 import json
 import random
 
-collectables = []
-
 class Hearts():
+
     def __init__(self, lives_rate):
 
         self.lives_rate = lives_rate
@@ -32,7 +31,7 @@ class Hearts():
 
     def update(self, current_time):
 
-        COLLECTABLE_LIFETIME = 10000
+        self.COLLECTABLE_LIFETIME = 10000
 
         for item in self.collectables[:]:
             if current_time - item["spawn"] > self.COLLECTABLE_LIFETIME:
@@ -73,3 +72,42 @@ class Hearts():
                 self.hearts.pop()
             except IndexError:
                 pass
+
+class Potions():
+
+    def __init__(self):
+        
+        self.potion = StillImage(random.randint(-117, 710), random.choice([600, 715]), 70, 70, "strength_potion.png")
+
+        self.draw_or_not = True
+
+    def spawn_collectable(self, current_time):
+
+        self.potion = StillImage(random.randint(-117, 710), random.choice([600, 715]), 70, 70, "strength_potion.png")
+        self.spawn_time = current_time
+
+        self.draw_or_not = True
+
+    def draw(self, window):
+
+        tick = time.get_ticks() // 500 % 2
+        if tick == 0:
+            self.potion.draw(window)
+        else:
+            ghost_image = self.potion.image.copy()
+            ghost_image.set_alpha(100)
+            window.blit(ghost_image, (self.potion.rect.x, self.potion.rect.y))
+
+    def update(self, current_time):
+
+        self.COLLECTABLE_LIFETIME = 10000
+
+        for item in self.collectables[:]:
+            if current_time - self.spawn_time > self.COLLECTABLE_LIFETIME:
+                self.collectables.remove(item)
+
+    def pick_up(self, knight_hitbox):
+
+        if knight_hitbox.colliderect(self.potion.rect):
+
+            self.draw_or_not = False

@@ -188,6 +188,8 @@ except Exception:
 
 highscore_written = False
 
+potion = Potions()
+
 font = font.Font(None, 300)
 wave_text = WavesText(f"Wave {wave}", font, (0, 0, 0), (50, 350))
 previous_wave = 0
@@ -447,6 +449,10 @@ while True:
                     knight.play_once_done = False
 
                 background.draw(window)
+
+                if potion.draw_or_not:
+                    potion.draw(window)
+                potion.pick_up(knight.get_hitbox())
 
                 if scorenum >= previous_wave + 1000:
 

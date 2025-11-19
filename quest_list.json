@@ -36,7 +36,7 @@
       true,
       true,
       true,
-      false,
+      true,
       false,
       false,
       false,
@@ -46,14 +46,14 @@
       true,
       true,
       true,
-      false,
+      true,
       false,
       false,
       false,
       false
     ],
     "objectives": {
-      "skeletonsDefeated": 41,
+      "skeletonsDefeated": 50,
       "requiredSkeletons": [
         1,
         10,
@@ -157,7 +157,7 @@
       false
     ],
     "objectives": {
-      "leftDefeated": 23,
+      "leftDefeated": 28,
       "requiredLeft": [
         10,
         50
@@ -188,7 +188,7 @@
       false
     ],
     "objectives": {
-      "rightDefeated": 20,
+      "rightDefeated": 24,
       "requiredRight": [
         10,
         50
@@ -316,8 +316,8 @@
       true
     ],
     "objectives": {
-      "rightDefeated": 20,
-      "leftDefeated": 23,
+      "rightDefeated": 24,
+      "leftDefeated": 28,
       "requiredRight": [
         5,
         15
