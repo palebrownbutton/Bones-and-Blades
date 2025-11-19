@@ -601,7 +601,7 @@ def game_over(window):
     background.draw(window)
     playAgian.draw(window, is_selected)
     home.draw(window, is_selected)
-    rendered_game_over.draw(window, (45, 50))
+    rendered_game_over.draw(window, (50, 50))
     rendered_highscore.draw(window, (255, 250))
 
     pressed= key.get_pressed()

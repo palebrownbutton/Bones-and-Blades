@@ -35,7 +35,7 @@
     "isCompleted": [
       true,
       true,
-      false,
+      true,
       false,
       false,
       false,
@@ -45,7 +45,7 @@
     "has_give_xp": [
       true,
       true,
-      false,
+      true,
       false,
       false,
       false,
@@ -53,7 +53,7 @@
       false
     ],
     "objectives": {
-      "skeletonsDefeated": 16,
+      "skeletonsDefeated": 41,
       "requiredSkeletons": [
         1,
         10,
@@ -100,7 +100,7 @@
       ]
     },
     "isCompleted": [
-      false,
+      true,
       false,
       false,
       false,
@@ -110,7 +110,7 @@
       false
     ],
     "has_give_xp": [
-      false,
+      true,
       false,
       false,
       false,
@@ -120,7 +120,7 @@
       false
     ],
     "objectives": {
-      "archersDefeated": 0,
+      "archersDefeated": 2,
       "requiredArchers": [
         1,
         5,
@@ -157,7 +157,7 @@
       false
     ],
     "objectives": {
-      "leftDefeated": 10,
+      "leftDefeated": 23,
       "requiredLeft": [
         10,
         50
@@ -180,15 +180,15 @@
       ]
     },
     "isCompleted": [
-      false,
+      true,
       false
     ],
     "has_give_xp": [
-      false,
+      true,
       false
     ],
     "objectives": {
-      "rightDefeated": 6,
+      "rightDefeated": 20,
       "requiredRight": [
         10,
         50
@@ -214,17 +214,17 @@
       ]
     },
     "isCompleted": [
-      false,
+      true,
       false,
       false
     ],
     "has_give_xp": [
-      false,
+      true,
       false,
       false
     ],
     "objectives": {
-      "wavesDefeated": 1,
+      "wavesDefeated": 0,
       "requiredWaves": [
         3,
         10,
@@ -309,15 +309,15 @@
     },
     "isCompleted": [
       true,
-      false
+      true
     ],
     "has_give_xp": [
       true,
-      false
+      true
     ],
     "objectives": {
-      "rightDefeated": 6,
-      "leftDefeated": 10,
+      "rightDefeated": 20,
+      "leftDefeated": 23,
       "requiredRight": [
         5,
         15
@@ -430,12 +430,12 @@
       ]
     },
     "isCompleted": [
-      false,
-      false
+      true,
+      true
     ],
     "has_give_xp": [
-      false,
-      false
+      true,
+      true
     ],
     "objectives": {
       "wavesDefeated": 0,

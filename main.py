@@ -9,6 +9,7 @@ from CharacterSelect import *
 import StartScreen
 from EnemyMovement import *
 from ImageEffects import *
+from Collectables import *
 
 init()
 font.init()
@@ -141,13 +142,10 @@ def game_reset():
     except Exception:
         pass
 
-    lives = 5
-    hearts = []
-    HEART_X_BASE = 135
-    HEART_SPACING = 50
-    for i in range(5):
-        heart = StillImage(HEART_X_BASE + i * HEART_SPACING, 0, 45, 45, "hearts.png")
-        hearts.append(heart)
+    with open ("upgrades.json") as file:
+        data = json.load(file)[1]
+        lives_rate = data["upgrade_level"]["life_spawn_time_upgrade"]
+    hearts_manager = Hearts(lives_rate)
 
     quests = quest_list2()
     for quest in quests.values():
@@ -159,13 +157,11 @@ def game_reset():
 is_home = True
 
 lives_image = StillImage(5, -40, 128, 128, "lives.png")
-lives = 5
-hearts = []
-HEART_X_BASE = 135
-HEART_SPACING = 50
-for i in range(5):
-    heart = StillImage(HEART_X_BASE + i * HEART_SPACING, 0, 45, 45, "hearts.png")
-    hearts.append(heart)
+
+with open ("upgrades.json") as file:
+    data = json.load(file)[1]
+    lives_rate = data["upgrade_level"]["life_spawn_time_upgrade"]
+hearts_manager = Hearts(lives_rate)
 
 collectibles = []
 
@@ -306,13 +302,9 @@ while True:
 
                 current_time = time.get_ticks() - paused_time
 
-                if current_time - heart_spawn_time > (60000 * (1.0 - (lives_rate * 0.04))) and len(hearts) < 5:
+                if current_time - heart_spawn_time > (60000 * (1.0 - (lives_rate * 0.04))) and hearts_manager.lives < 5:
                     heart_spawn_time = current_time
-                    new_heart = StillImage(random.randint(-117, 710), random.choice([600, 715]), 45, 45, "hearts.png")
-                    collectibles.append({
-                        "obj": new_heart,
-                        "spawn": current_time
-                    })
+                    hearts_manager.spawn_collectable(current_time)
 
                 if current_time - last_spawn_time > 20000 and len(skeletons) <= 3 + wave:
                     last_spawn_time = current_time
@@ -460,7 +452,7 @@ while True:
 
                     wave += 1
                     new_wave = True
-                    quest_update(None, None, wave, 0, 0, lost_a_heart)
+                    quest_update(None, None, wave, 0, 0, lost_a_heart, current_warriors)
                     lost_a_heart = False
                     previous_wave = scorenum
                     wave_text = WavesText(f"Wave {wave}", font, (0, 0, 0), (50, 350))
@@ -503,47 +495,15 @@ while True:
                                 archer.die("Skeleton_Archer", new_wave, lost_a_heart)
                                 new_wave = False
 
-                COLLECTIBLE_LIFETIME = 10000 
-                for item in collectibles[:]:
-                    c = item["obj"]
-                    spawn = item.get("spawn", 0)
-                    tick = time.get_ticks() // 500 % 2
-                    if tick == 0:
-                        c.draw(window)
-                    else:
-                        ghost_image = c.image.copy()
-                        ghost_image.set_alpha(100)
-                        window.blit(ghost_image, (c.rect.x, c.rect.y))
-
-                    if c.rect.x < knight.rect.x:
-                        distance = knight.rect.x - c.rect.x
-                    else:
-                        distance = c.rect.x - knight.rect.x
-
-                    if knight_hitbox.colliderect(c.rect):
-                        if not (c.rect.x == 715 and getattr(knight, "on_ground", True)):
-                            if len(hearts) < 5:
-                                new_x = HEART_X_BASE + len(hearts) * HEART_SPACING
-                                heart = StillImage(new_x, 0, 45, 45, "hearts.png")
-                                hearts.append(heart)
-                                lives += 1
-                        try:
-                            collectibles.remove(item)
-                        except ValueError:
-                            pass
-                        continue
-
-                    if current_time - spawn > COLLECTIBLE_LIFETIME:
-                        try:
-                            collectibles.remove(item)
-                        except ValueError:
-                            pass
-
                 knight.draw(window)
                 lives_image.draw(window)
                 scorepic.draw(window)
                 rendered_score = scorenumtxt.render(f"{scorenum}", True, (3, 41, 153))
                 window.blit(rendered_score, (135, 53 ))
+
+                hearts_manager.update(current_time)
+                hearts_manager.pick_up(knight.get_hitbox())
+                hearts_manager.draw(window)
 
                 for arrow in arrows:
                     prev_x = arrow.rect.x
@@ -573,15 +533,12 @@ while True:
                                         pass
                                     knight.resize(200, 200)
                                 if knight.hp <= 0:
-                                    lives -= 1
+                                    hearts_manager.lose_a_heart()
                                     lost_a_heart = True
                                     quest_update(None, None, wave, current_archers, current_skeletons, lost_a_heart, current_warriors)
-                                    try:
-                                        hearts.remove(hearts[-1])
-                                    except Exception:
-                                        pass
+
                                     knight.hp = 100
-                                    if lives == 0:
+                                    if hearts_manager.lives == 0:
                                         knight.die(character)
                                 else:
                                     knight.took_damage = False
@@ -600,9 +557,6 @@ while True:
                             arrows.remove(arrow)
                         except ValueError:
                             pass
-
-                for heart in hearts:
-                    heart.draw(window)
 
                 for skeleton in skeletons:
                     for skeleton_healthbar in skeleton_healthbars:
@@ -687,15 +641,12 @@ while True:
                                             knight.resize(200, 200)
 
                                             if knight.hp <= 0:
-                                                lives -= 1
+                                                hearts_manager.lose_a_heart()
                                                 lost_a_heart = True
                                                 quest_update(None, None, wave, current_archers, current_skeletons, lost_a_heart, current_warriors)
-                                                try:
-                                                    hearts.remove(hearts[-1])
-                                                except Exception:
-                                                    pass
+ 
                                                 knight.hp = 100
-                                                if lives == 0:
+                                                if hearts_manager.lives == 0:
                                                     knight.die(character)
 
                                         else:
@@ -770,15 +721,12 @@ while True:
                                     knight.resize(200, 200)
 
                                     if knight.hp <= 0:
-                                        lives -= 1
+                                        hearts_manager.lose_a_heart()
                                         lost_a_heart = True
                                         quest_update(None, None, wave, current_archers, current_skeletons, lost_a_heart, current_warriors)
-                                        try:
-                                            hearts.remove(hearts[-1])
-                                        except Exception:
-                                            pass
+
                                         knight.hp = 100
-                                        if lives == 0:
+                                        if hearts_manager.lives == 0:
                                             knight.die(character)
 
                                 else:
