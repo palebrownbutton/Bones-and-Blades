@@ -355,10 +355,16 @@ def recalc_upgrade_text():
     rendered_strength_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{strength_required_xp}")
     rendered_lives_rate_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{lives_rate_required_xp}")
 
+benefit_cooldown = False
+
 def upgrade_menu(window):
-    global hp_upgrade_level, strength_upgrade_level, lives_rate_upgrade_level, hp_required_xp, strength_required_xp, lives_rate_required_xp, rendered_total_xp_text, data, total_xp
+    global hp_upgrade_level, strength_upgrade_level, lives_rate_upgrade_level, hp_required_xp, strength_required_xp, lives_rate_required_xp, rendered_total_xp_text, data, total_xp, benefit_cooldown
 
     mouse_x, mouse_y = mouse.get_pos()
+    mouse_pressed = mouse.get_pressed()[0]
+
+    if not mouse_pressed:
+        benefit_cooldown = False
 
     background.draw(window)
 
@@ -383,13 +389,16 @@ def upgrade_menu(window):
             benefit.set_image("no_benefits_button.png")
         benefit.draw(window)
 
-        if cost <= total_xp and(mouse_x >= benefit.rect.x and mouse_x <= benefit.rect.x + benefit.rect.width and mouse_y >= benefit.rect.y and mouse_y <= benefit.rect.y + benefit.rect.height) and mouse.get_pressed()[0]:
+        if (mouse_pressed and not benefit_cooldown and cost <= total_xp and benefit.rect.collidepoint(mouse_x, mouse_y)):
+
+            benefit_cooldown = True
             total_xp -= cost
-            if idx == 0:
+
+            if idx == 0 and strength_upgrade_level <= 10:
                 strength_upgrade_level += 1
-            elif idx == 1:
+            elif idx == 1 and hp_upgrade_level <= 10:
                 hp_upgrade_level += 1
-            else:
+            elif idx == 2 and lives_rate_upgrade_level <= 10:
                 lives_rate_upgrade_level += 1
 
     rendered_total_xp_text.draw(window, (615, 10))
@@ -418,6 +427,13 @@ def upgrade_menu(window):
             global click_cooldown
             click_cooldown = True
             return False        
+        
+    if hp_upgrade_level > 10:
+        hp_upgrade_level = 10
+    if strength_upgrade_level > 10:
+        strength_upgrade_level = 10
+    if lives_rate_upgrade_level > 10:
+        lives_rate_upgrade_level = 10
 
     data[1]["upgrade_level"]["hp_upgrade"] = hp_upgrade_level
     data[1]["upgrade_level"]["strength_upgrade"] = strength_upgrade_level

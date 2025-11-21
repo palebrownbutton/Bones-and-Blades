@@ -106,8 +106,14 @@ class Potions():
             if current_time - self.spawn_time > self.COLLECTABLE_LIFETIME:
                 self.collectables.remove(item)
 
-    def pick_up(self, knight_hitbox):
+    def pick_up(self, knight_hitbox, knight_x, knight_y):
 
         if knight_hitbox.colliderect(self.potion.rect):
 
             self.draw_or_not = False
+            self.in_use(knight_x, knight_y)
+
+    def in_use(self, knight_x, knight_y):
+
+        self.x = knight_x + 50
+        self.y = knight_y + 10

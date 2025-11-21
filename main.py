@@ -452,7 +452,7 @@ while True:
 
                 if potion.draw_or_not:
                     potion.draw(window)
-                potion.pick_up(knight.get_hitbox())
+                potion.pick_up(knight.get_hitbox(), knight.rect.x, knight.rect.y)
 
                 if scorenum >= previous_wave + 1000:
 
