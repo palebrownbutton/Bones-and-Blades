@@ -450,10 +450,6 @@ while True:
 
                 background.draw(window)
 
-                if potion.draw_or_not:
-                    potion.draw(window)
-                potion.pick_up(knight.get_hitbox(), knight.rect.x, knight.rect.y)
-
                 if scorenum >= previous_wave + 1000:
 
                     wave += 1
@@ -506,6 +502,9 @@ while True:
                 scorepic.draw(window)
                 rendered_score = scorenumtxt.render(f"{scorenum}", True, (3, 41, 153))
                 window.blit(rendered_score, (135, 53 ))
+
+                potion.pick_up(knight.get_hitbox())
+                potion.draw(window, knight.rect)
 
                 hearts_manager.update(current_time)
                 hearts_manager.pick_up(knight.get_hitbox())

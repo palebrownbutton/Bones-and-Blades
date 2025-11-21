@@ -1,6 +1,9 @@
 from StillImage import *
 import json
 import random
+import math
+
+init()
 
 class Hearts():
 
@@ -73,47 +76,89 @@ class Hearts():
             except IndexError:
                 pass
 
+def lerp_colour(c1, c2, t):
+    return (
+        int(c1[0] + (c2[0] - c1[0]) * t),
+        int(c1[1] + (c2[1] - c1[1]) * t),
+        int(c1[2] + (c2[2] - c1[2]) * t)
+    )
+
 class Potions():
-
     def __init__(self):
-        
-        self.potion = StillImage(random.randint(-117, 710), random.choice([600, 715]), 70, 70, "strength_potion.png")
-
+        self.potion = StillImage(random.randint(0, 710), random.choice([600, 715]), 70, 70, "strength_potion.png")
         self.draw_or_not = True
+        self.active = False
+        self.effect_duration = 30000
+        self.start_time = None
 
-    def spawn_collectable(self, current_time):
+        self.follow_knight = False
 
-        self.potion = StillImage(random.randint(-117, 710), random.choice([600, 715]), 70, 70, "strength_potion.png")
-        self.spawn_time = current_time
-
+    def spawn_collectable(self):
+        self.potion = StillImage(random.randint(0, 710), random.choice([600, 715]), 70, 70, "strength_potion.png")
         self.draw_or_not = True
+        self.active = False
+        self.start_time = None
 
-    def draw(self, window):
-
-        tick = time.get_ticks() // 500 % 2
-        if tick == 0:
-            self.potion.draw(window)
-        else:
-            ghost_image = self.potion.image.copy()
-            ghost_image.set_alpha(100)
-            window.blit(ghost_image, (self.potion.rect.x, self.potion.rect.y))
-
-    def update(self, current_time):
-
-        self.COLLECTABLE_LIFETIME = 10000
-
-        for item in self.collectables[:]:
-            if current_time - self.spawn_time > self.COLLECTABLE_LIFETIME:
-                self.collectables.remove(item)
-
-    def pick_up(self, knight_hitbox, knight_x, knight_y):
-
-        if knight_hitbox.colliderect(self.potion.rect):
-
+    def pick_up(self, knight_hitbox):
+        if self.draw_or_not and knight_hitbox.colliderect(self.potion.rect):
+            self.active = True
+            self.start_time = time.get_ticks()
+            
+            self.follow_knight = True
             self.draw_or_not = False
-            self.in_use(knight_x, knight_y)
 
-    def in_use(self, knight_x, knight_y):
+    def draw(self, window, knight_rect):
 
-        self.x = knight_x + 50
-        self.y = knight_y + 10
+        if self.active and knight_rect:
+            self.draw_effect(window, knight_rect)
+
+        if self.follow_knight and knight_rect:
+
+            self.potion.rect.centerx = knight_rect.centerx
+            self.potion.rect.top = knight_rect.top - 5
+            window.blit(self.potion.image, (self.potion.rect.x, self.potion.rect.y))
+        
+        elif self.draw_or_not:
+
+            tick = time.get_ticks() // 500 % 2
+            if tick == 0:
+                self.potion.draw(window)
+            else:
+                ghost_image = self.potion.image.copy()
+                ghost_image.set_alpha(100)
+                window.blit(ghost_image, (self.potion.rect.x, self.potion.rect.y))
+
+    def draw_effect(self, window, knight_rect):
+        elapsed = time.get_ticks() - self.start_time
+        if elapsed > self.effect_duration:
+            self.active = False
+            return
+
+        x = knight_rect.centerx
+        y = knight_rect.top + 30
+        radius = 45
+
+        circle_outline = (0, 0, 0)
+        fill_start_colour = (131, 201, 242)
+        fill_end_colour = (2, 12, 51)
+
+        draw.circle(window, fill_start_colour, (x, y), radius)
+        draw.circle(window, circle_outline, (x, y), radius, 2)
+
+        progress =  min(elapsed / self.effect_duration, 1)
+        fill_colour = lerp_colour(fill_start_colour, fill_end_colour, progress)
+
+        start_angle = -math.pi / 2
+        end_angle = start_angle + progress * 2 * math.pi
+
+        points = [(x, y)]
+        step = 0.01
+        steps_count = int((end_angle - start_angle) / step) + 1
+        for i in range(steps_count):
+            angle = start_angle + i * step
+            px = x + radius * math.cos(angle)
+            py = y + radius * math.sin(angle)
+            points.append((px, py))
+        points.append((x, y))
+
+        draw.polygon(window, fill_colour, points)

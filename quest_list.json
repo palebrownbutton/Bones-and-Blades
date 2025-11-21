@@ -253,7 +253,7 @@
     ],
     "has_give_xp": [
       true,
-      true
+      false
     ],
     "objectives": {
       "requiredWaves": [
@@ -283,7 +283,7 @@
     ],
     "has_give_xp": [
       true,
-      true
+      false
     ],
     "objectives": {
       "requiredWaves": [
@@ -313,7 +313,7 @@
     ],
     "has_give_xp": [
       true,
-      true
+      false
     ],
     "objectives": {
       "rightDefeated": 24,
@@ -435,7 +435,7 @@
     ],
     "has_give_xp": [
       true,
-      true
+      false
     ],
     "objectives": {
       "wavesDefeated": 0,
