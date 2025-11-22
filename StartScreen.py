@@ -265,7 +265,7 @@ def quests_menu(window):
 
                 window.blit(rendered_quest_title.rendered_text, (155, y_offset))
                 window.blit(rendered_quest_detail.rendered_text, (170, y_offset + 40))
-                window.blit(rendered_quest_rewards.rendered_text, (625, y_offset + 15))
+                window.blit(rendered_quest_rewards.rendered_text, (620, y_offset + 15))
 
         if (mouse_x >= house_button.rect.x and mouse_x <= house_button.rect.x + house_button.rect.width and mouse_y >= house_button.rect.y and mouse_y <= house_button.rect.y + house_button.rect.height):
             if mouse.get_pressed()[0]:
@@ -414,9 +414,9 @@ def upgrade_menu(window):
     hp_icon.draw(window)
     lives_rate_icon.draw(window)
 
-    rendered_hp_upgrade_level_text.draw(window, (310, 430))
-    rendered_strength_upgrade_level_text.draw(window, (60, 430))
-    rendered_lives_rate_upgrade_level_text.draw(window, (560, 430))
+    rendered_hp_upgrade_level_text.draw(window, (305, 430))
+    rendered_strength_upgrade_level_text.draw(window, (55, 430))
+    rendered_lives_rate_upgrade_level_text.draw(window, (555, 430))
 
     rendered_hp_required_xp_text.draw(window, (409, 549))
     rendered_strength_required_xp_text.draw(window, (159, 549))

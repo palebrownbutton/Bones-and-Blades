@@ -8,17 +8,21 @@
       "Death Toll Rising",
       "Grave Maker",
       "Butcher's Mark",
-      "Final Breath"
+      "Final Breath",
+      "Mass Grave",
+      "Endless Silence"
     ],
     "details": [
-      "Defeat you first Spearman",
+      "Defeat your first Spearman",
       "Kill 10 Spearmen",
       "Kill 25 Spearmen",
       "Kill 50 Spearmen",
       "Kill 75 Spearmen",
       "Kill 100 Spearmen",
       "Kill 150 Spearmen",
-      "Kill 200 Spearmen"
+      "Kill 200 Spearmen",
+      "Kill 500 Spearmen",
+      "Kill 1000 Spearmen"
     ],
     "reward": {
       "xp": [
@@ -29,7 +33,9 @@
         400,
         650,
         700,
-        1000
+        1000,
+        5500,
+        10000
       ]
     },
     "isCompleted": [
@@ -40,9 +46,13 @@
       false,
       false,
       false,
+      false,
+      false,
       false
     ],
     "has_give_xp": [
+      false,
+      false,
       false,
       false,
       false,
@@ -62,7 +72,9 @@
         75,
         100,
         150,
-        200
+        200,
+        500,
+        1000
       ]
     }
   },
@@ -71,11 +83,12 @@
       "One Less Eye in The Sky",
       "Silent Arrow",
       "Featherfall Execution",
-      "Quiever Cleanse",
+      "Quiver Cleanse",
       "String Breaker",
       "Rain of Silence",
       "Arrowstorm Ender",
-      "The Last Draw"
+      "The Last Draw",
+      "Featherless Doom"
     ],
     "details": [
       "Defeat your first Archer",
@@ -85,7 +98,8 @@
       "Kill 75 Archers",
       "Kill 100 Archers",
       "Kill 150 Archers",
-      "Kill 200 Archers"
+      "Kill 200 Archers",
+      "Kill 250 Archers"
     ],
     "reward": {
       "xp": [
@@ -96,7 +110,8 @@
         500,
         700,
         850,
-        1500
+        1500,
+        1750
       ]
     },
     "isCompleted": [
@@ -107,9 +122,11 @@
       false,
       false,
       false,
+      false,
       false
     ],
     "has_give_xp": [
+      false,
       false,
       false,
       false,
@@ -129,61 +146,73 @@
         75,
         100,
         150,
-        200
+        200,
+        250
       ]
     }
   },
   "3": {
     "title": [
       "Left Side Sweep",
-      "Leftward Onslaught"
+      "Leftward Onslaught",
+      "Leftward Massacre"
     ],
     "details": [
       "Kill 10 enemies that spawn from the left",
-      "Kill 50 enemies that spawn from the left"
+      "Kill 50 enemies that spawn from the left",
+      "Kill 100 enemies that spawn from the left"
     ],
     "reward": {
       "xp": [
         300,
-        500
+        500,
+        1500
       ]
     },
     "isCompleted": [
+      false,
       false,
       false
     ],
     "has_give_xp": [
       false,
+      false,
       false
     ],
     "objectives": {
-      "leftDefeated": 0,
+      "leftDefeated": 1,
       "requiredLeft": [
         10,
-        50
+        50,
+        100
       ]
     }
   },
   "4": {
     "title": [
       "Right Side Rampage",
-      "Right Side Ruin"
+      "Right Side Ruin",
+      "Rightward Dominion"
     ],
     "details": [
       "Kill 10 enemies that spawn from the right",
-      "Kill 50 enemies that spawn from the right"
+      "Kill 50 enemies that spawn from the right",
+      "Kill 100 enemies that spawn from the right"
     ],
     "reward": {
       "xp": [
         300,
-        500
+        500,
+        1500
       ]
     },
     "isCompleted": [
       false,
+      false,
       false
     ],
     "has_give_xp": [
+      false,
       false,
       false
     ],
@@ -191,7 +220,8 @@
       "rightDefeated": 0,
       "requiredRight": [
         10,
-        50
+        50,
+        100
       ]
     }
   },
@@ -199,26 +229,36 @@
     "title": [
       "Wave Rider",
       "Hold the Line",
-      "Breaker of the Surge"
+      "Breaker of the Surge",
+      "Tide Crusher",
+      "Endless Defender"
     ],
     "details": [
       "Beat wave 3",
       "Beat wave 10",
-      "Beat wave 20"
+      "Beat wave 20",
+      "Beat wave 50",
+      "Beat wave 100"
     ],
     "reward": {
       "xp": [
         150,
         700,
-        1700
+        1700,
+        3000,
+        5000
       ]
     },
     "isCompleted": [
       false,
       false,
+      false,
+      false,
       false
     ],
     "has_give_xp": [
+      false,
+      false,
       false,
       false,
       false
@@ -228,7 +268,9 @@
       "requiredWaves": [
         3,
         10,
-        20
+        20,
+        50,
+        100
       ]
     }
   },
@@ -317,7 +359,7 @@
     ],
     "objectives": {
       "rightDefeated": 0,
-      "leftDefeated": 0,
+      "leftDefeated": 1,
       "requiredRight": [
         5,
         15
@@ -334,8 +376,8 @@
       "Flawless Onslaught"
     ],
     "details": [
-      "Beat 1 wave without loosing a heart",
-      "Beat 3 waves without loosing a heart"
+      "Beat 1 wave without losing a heart",
+      "Beat 3 waves without losing a heart"
     ],
     "reward": {
       "xp": [
@@ -416,7 +458,7 @@
   },
   "11": {
     "title": [
-      "Shiedless Victory",
+      "Shieldless Victory",
       "Waves of Valor"
     ],
     "details": [
