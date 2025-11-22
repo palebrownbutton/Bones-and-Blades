@@ -88,8 +88,12 @@ class Potions():
         self.potion = StillImage(random.randint(0, 710), random.choice([600, 715]), 70, 70, "strength_potion.png")
         self.draw_or_not = True
         self.active = False
-        self.effect_duration = 30000
+        self.effect_duration = 15000
         self.start_time = None
+
+        self.y_offset = -40
+        self.small_height = 35
+        self.small_width = 35
 
         self.follow_knight = False
 
@@ -107,16 +111,21 @@ class Potions():
             self.follow_knight = True
             self.draw_or_not = False
 
-    def draw(self, window, knight_rect):
+    def draw(self, window, knight_rect, direction):
 
         if self.active and knight_rect:
-            self.draw_effect(window, knight_rect)
+            self.draw_effect(window, knight_rect, direction)
 
         if self.follow_knight and knight_rect:
 
-            self.potion.rect.centerx = knight_rect.centerx
-            self.potion.rect.top = knight_rect.top - 5
-            window.blit(self.potion.image, (self.potion.rect.x, self.potion.rect.y))
+            if direction == "right":
+                self.potion.rect.centerx = knight_rect.x + knight_rect.width // 2 - 50
+
+            else:
+                self.potion.rect.centerx = knight_rect.x + knight_rect.width // 2 + 50
+            self.potion.rect.y = knight_rect.top + 15
+            scaled_image = transform.scale(self.potion.image, (self.small_width, self.small_height))
+            window.blit(scaled_image, scaled_image.get_rect(center=self.potion.rect.center))
         
         elif self.draw_or_not:
 
@@ -128,16 +137,21 @@ class Potions():
                 ghost_image.set_alpha(100)
                 window.blit(ghost_image, (self.potion.rect.x, self.potion.rect.y))
 
-    def draw_effect(self, window, knight_rect):
+    def draw_effect(self, window, knight_rect, direction):
         elapsed = time.get_ticks() - self.start_time
         if elapsed > self.effect_duration:
             self.active = False
+            self.follow_knight = False
             return
 
-        x = knight_rect.centerx
-        y = knight_rect.top + 30
-        radius = 45
+        if direction == "right":
+            x = knight_rect.x + knight_rect.width // 2 - 50
 
+        else:
+            x = knight_rect.x + knight_rect.width // 2 + 50
+        y = knight_rect.top + 48
+
+        radius = 25
         circle_outline = (0, 0, 0)
         fill_start_colour = (131, 201, 242)
         fill_end_colour = (2, 12, 51)

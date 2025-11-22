@@ -85,7 +85,7 @@ with open("quest_list.json", "w") as file:
     json.dump(data, file, indent=2)
 
 def game_reset():
-    global knight, character, skeletons, prev_space, prev_down, ignore_return, scorenum, max_skeletons, live_skeletons,  hearts, lives, archers, max_archers, archers_active, background, background_switched, game_start_time, highscore_written, wave, new_wave, lost_a_heart, warriors, max_warriors
+    global knight, character, skeletons, prev_space, prev_down, ignore_return, scorenum, max_skeletons, live_skeletons, hearts_manager, archers, max_archers, archers_active, background, background_switched, game_start_time, highscore_written, wave, new_wave, lost_a_heart, warriors, max_warriors
 
     background = StillImage(0, 0, 800, 800, "background1.png")
     background_switched = False
@@ -504,7 +504,7 @@ while True:
                 window.blit(rendered_score, (135, 53 ))
 
                 potion.pick_up(knight.get_hitbox())
-                potion.draw(window, knight.rect)
+                potion.draw(window, knight.rect, knight.direction)
 
                 hearts_manager.update(current_time)
                 hearts_manager.pick_up(knight.get_hitbox())
