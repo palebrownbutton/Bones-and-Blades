@@ -86,7 +86,7 @@ def lerp_colour(c1, c2, t):
 class Potions():
     def __init__(self):
         self.potion = StillImage(random.randint(0, 710), random.choice([600, 715]), 70, 70, "strength_potion.png")
-        self.draw_or_not = True
+        self.draw_or_not = False
         self.active = False
         self.effect_duration = 15000
         self.start_time = None

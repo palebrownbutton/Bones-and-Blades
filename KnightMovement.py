@@ -16,7 +16,8 @@ class Knight(AnimatedSprite):
         self.attacking = False
         self.defending = False
         self.hp = attributes[0]["hp"] * float(f"1.{(attributes[1]['upgrade_level']['hp_upgrade']) - 1}")
-        self.strength = attributes[0]["strength"] * float(f"1.{(attributes[1]['upgrade_level']['strength_upgrade']) - 1}")
+        self.base_strength = attributes[0]["strength"] * float(f"1.{(attributes[1]['upgrade_level']['strength_upgrade']) - 1}")
+        self.strength = self.base_strength
         self.dead = False
         self.took_damage = False
 

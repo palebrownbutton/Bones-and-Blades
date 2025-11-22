@@ -178,6 +178,8 @@ with open ("upgrades.json") as file:
     data = json.load(file)[1]
     lives_rate = data["upgrade_level"]["life_spawn_time_upgrade"]
 
+strength_spawn_time = time.get_ticks()
+
 try:
     with open ("highscore.txt", "r") as file:
         lines = file.readlines()
@@ -299,14 +301,19 @@ while True:
                 mixer.music.play(-1)
 
             current_time = time.get_ticks()
+            print(current_time)
 
             if not paused_game:
 
                 current_time = time.get_ticks() - paused_time
 
-                if current_time - heart_spawn_time > (60000 * (1.0 - (lives_rate * 0.04))) and hearts_manager.lives < 5:
+                if current_time - heart_spawn_time > (random.randint(55000, 65000) * (1.0 - (lives_rate * 0.04))) and hearts_manager.lives < 5:
                     heart_spawn_time = current_time
                     hearts_manager.spawn_collectable(current_time)
+
+                if current_time - strength_spawn_time > (random.randint(10000, 120000)) and potion.active == False:
+                    strength_spawn_time = current_time
+                    potion.spawn_collectable()
 
                 if current_time - last_spawn_time > 20000 and len(skeletons) <= 3 + wave:
                     last_spawn_time = current_time
@@ -503,8 +510,15 @@ while True:
                 rendered_score = scorenumtxt.render(f"{scorenum}", True, (3, 41, 153))
                 window.blit(rendered_score, (135, 53 ))
 
-                potion.pick_up(knight.get_hitbox())
-                potion.draw(window, knight.rect, knight.direction)
+                if potion.draw_or_not == True or potion.active:
+                    potion.pick_up(knight.get_hitbox())
+                    potion.draw(window, knight.rect, knight.direction)
+
+                    if potion.active:
+                        knight.strength = knight.base_strength + 10
+                    else:
+                        knight.strength = knight.base_strength
+                        strength_spawn_time = current_time
 
                 hearts_manager.update(current_time)
                 hearts_manager.pick_up(knight.get_hitbox())

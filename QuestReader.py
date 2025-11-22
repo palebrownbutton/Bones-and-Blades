@@ -1,6 +1,8 @@
 from pygame import *
 import json
 
+# currently have a quest xp dirrence with upgrades of 23,905. As in upgrades has more xp than avialable to get
+
 def quest_list1():
 
     with open ("quest_list.json", "r") as file:
