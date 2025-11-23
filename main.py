@@ -311,7 +311,7 @@ while True:
 
                 current_time = time.get_ticks() - paused_time
 
-                if current_time - heart_spawn_time > (random.randint(55000, 65000) * (1.0 - (lives_rate * 0.04))) and hearts_manager.lives < 5:
+                if current_time - heart_spawn_time > lives_rate and hearts_manager.lives < 5:
                     heart_spawn_time = current_time
                     hearts_manager.spawn_collectable(current_time)
 

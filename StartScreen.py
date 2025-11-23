@@ -349,7 +349,7 @@ for i in range(3):
     benefits.append(benefit)
 
 def recalc_upgrade_text():
-    global hp_required_xp, strength_required_xp, lives_rate_required_xp, rendered_hp_upgrade_level_text, rendered_strength_upgrade_level_text, rendered_lives_rate_upgrade_level_text, rendered_hp_required_xp_text, rendered_strength_required_xp_text, rendered_lives_rate_required_xp_text
+    global hp_required_xp, strength_required_xp, lives_rate_required_xp, rendered_hp_upgrade_level_text, rendered_strength_upgrade_level_text, rendered_lives_rate_upgrade_level_text, rendered_hp_required_xp_text, rendered_strength_required_xp_text, rendered_lives_rate_required_xp_text, rendered_hp_text, rendered_hp_num, rendered_strength_text, rendered_strength_num, rendered_lives_rate, rendered_lives_rate_num
 
     hp_required_xp = data[1]["required_xp"]["hp_required_xp"][hp_upgrade_level - 1]
     strength_required_xp = data[1]["required_xp"]["strength_required_xp"][strength_upgrade_level - 1]
@@ -362,6 +362,13 @@ def recalc_upgrade_text():
     rendered_hp_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{hp_required_xp}")
     rendered_strength_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{strength_required_xp}")
     rendered_lives_rate_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{lives_rate_required_xp}")
+
+    rendered_hp_text = TextRender(None, 30, (255, 255, 255), "HP:") 
+    rendered_hp_num = TextRender(None, 60, (255, 255, 255), f"{data[0]['hp']}")
+    rendered_strength_text = TextRender(None, 30, (255, 255, 255), "Strength:")
+    rendered_strength_num = TextRender(None, 60, (255, 255, 255), f"{data[0]['strength']}")
+    rendered_lives_rate = TextRender(None, 30, (255, 255, 255), "Lives spawn rate:")
+    rendered_lives_rate_num = TextRender(None, 60, (255, 255, 255), f"{int(data[0]['life spawn time']/1000)} s")
 
 benefit_cooldown = False
 
@@ -386,28 +393,53 @@ def upgrade_menu(window):
             
         if idx == 0:
             cost = strength_required_xp
+            if strength_upgrade_level >= 10:
+                can_upgrade = False
+            else:
+                can_upgrade = True
         elif idx == 1:
             cost = hp_required_xp
+            if hp_upgrade_level >= 10:
+                can_upgrade = False
+            else:
+                can_upgrade = True
         else:
             cost = lives_rate_required_xp
+            if lives_rate_upgrade_level >= 10:
+                can_upgrade = False
+            else:
+                can_upgrade = True
         
-        if cost <= total_xp:
-            benefit.set_image("yes_benefits_button.png")
-        else:
-            benefit.set_image("no_benefits_button.png")
-        benefit.draw(window)
+        if can_upgrade:
+            if cost <= total_xp:
+                benefit.set_image("yes_benefits_button.png")
+            else:
+                benefit.set_image("no_benefits_button.png")
+            benefit.draw(window)
 
-        if (mouse_pressed and not benefit_cooldown and cost <= total_xp and benefit.rect.collidepoint(mouse_x, mouse_y)):
+            if (mouse_pressed and not benefit_cooldown and cost <= total_xp and benefit.rect.collidepoint(mouse_x, mouse_y)):
 
-            benefit_cooldown = True
-            total_xp -= cost
+                benefit_cooldown = True
+                total_xp -= cost
 
-            if idx == 0 and strength_upgrade_level <= 10:
-                strength_upgrade_level += 1
-            elif idx == 1 and hp_upgrade_level <= 10:
-                hp_upgrade_level += 1
-            elif idx == 2 and lives_rate_upgrade_level <= 10:
-                lives_rate_upgrade_level += 1
+                if idx == 0 and strength_upgrade_level <= 10:
+                    strength_upgrade_level += 1
+                elif idx == 1 and hp_upgrade_level <= 10:
+                    hp_upgrade_level += 1
+                elif idx == 2 and lives_rate_upgrade_level <= 10:
+                    lives_rate_upgrade_level += 1
+
+                base_hp = 50
+                base_strength = 10
+                base_life_spawn_time = 60000
+
+                hp_multiplier = 1 + 0.15 * (hp_upgrade_level - 1)
+                strength_multiplier = 1 + 0.23 * (strength_upgrade_level - 1)
+                lives_spawn_multiplier = 1 - 0.04 * (lives_rate_upgrade_level - 1)
+
+                data[0]["hp"] = int(base_hp * hp_multiplier)
+                data[0]["strength"] = int(base_strength * strength_multiplier)
+                data[0]["life spawn time"] = max(1, int(base_life_spawn_time * lives_spawn_multiplier))
 
     rendered_total_xp_text.draw(window, (615, 10))
 
@@ -426,9 +458,12 @@ def upgrade_menu(window):
     rendered_strength_upgrade_level_text.draw(window, (55, 430))
     rendered_lives_rate_upgrade_level_text.draw(window, (555, 430))
 
-    rendered_hp_required_xp_text.draw(window, (409, 549))
-    rendered_strength_required_xp_text.draw(window, (159, 549))
-    rendered_lives_rate_required_xp_text.draw(window, (659, 549)) 
+    if hp_upgrade_level < 10:
+        rendered_hp_required_xp_text.draw(window, (409, 549))
+    if strength_upgrade_level < 10:
+        rendered_strength_required_xp_text.draw(window, (159, 549))
+    if lives_rate_upgrade_level < 10:
+        rendered_lives_rate_required_xp_text.draw(window, (659, 549)) 
 
     if (mouse_x >= back_arrow.rect.x and mouse_x <= back_arrow.rect.x + back_arrow.rect.width and mouse_y >= back_arrow.rect.y and mouse_y <= back_arrow.rect.y + back_arrow.rect.height):
         if mouse.get_pressed()[0]:
@@ -447,6 +482,7 @@ def upgrade_menu(window):
     data[1]["upgrade_level"]["strength_upgrade"] = strength_upgrade_level
     data[1]["upgrade_level"]["life_spawn_time_upgrade"] = lives_rate_upgrade_level
     data[1]["total_xp"] = total_xp
+
     with open("upgrades.json", "w") as file:
         json.dump(data, file, indent=4)
 
