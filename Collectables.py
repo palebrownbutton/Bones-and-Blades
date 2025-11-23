@@ -4,6 +4,10 @@ import random
 import math
 
 init()
+mixer.init()
+
+health_sound = mixer.Sound("health_sound.mp3")
+health_sound.set_volume(0.1)
 
 class Hearts():
 
@@ -61,6 +65,7 @@ class Hearts():
             
             collectable = item["obj"]
             if knight_hitbox.colliderect(collectable.rect):
+                health_sound.play()
                 if self.lives < 5:
                     self.lives += 1
                     new_x = self.HEART_X_BASE + (self.lives - 1) * self.HEART_SPACING
@@ -82,6 +87,9 @@ def lerp_colour(c1, c2, t):
         int(c1[1] + (c2[1] - c1[1]) * t),
         int(c1[2] + (c2[2] - c1[2]) * t)
     )
+
+potion_collect = mixer.Sound("potion_sound.mp3")
+potion_collect.set_volume(0.1)
 
 class Potions():
     def __init__(self):
@@ -105,6 +113,7 @@ class Potions():
 
     def pick_up(self, knight_hitbox):
         if self.draw_or_not and knight_hitbox.colliderect(self.potion.rect):
+            potion_collect.play()
             self.active = True
             self.start_time = time.get_ticks()
             

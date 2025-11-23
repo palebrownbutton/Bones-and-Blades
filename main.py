@@ -19,6 +19,10 @@ window = display.set_mode((800, 800))
 clock = time.Clock()
 
 mixer.music.load("game_play.mp3")
+hurt_sound = mixer.Sound("hurt_sound.mp3")
+hurt_sound.set_volume(0.1)
+knight_hit = mixer.Sound("knight_hit_sound.mp3")
+knight_hit.set_volume(0.1)
 
 wave = 1
 new_wave = False
@@ -311,7 +315,7 @@ while True:
                     heart_spawn_time = current_time
                     hearts_manager.spawn_collectable(current_time)
 
-                if current_time - strength_spawn_time > (random.randint(10000, 120000)) and potion.active == False:
+                if current_time - strength_spawn_time > (random.randint(30000, 120000)) and potion.active == False:
                     strength_spawn_time = current_time
                     potion.spawn_collectable()
 
@@ -386,6 +390,7 @@ while True:
                         elif right:
                             knight.direction = "right"
                         knight.attack_moving(character)
+                        knight_hit.play()
                         knight.resize(200, 200)
                         moved = True
 
@@ -400,6 +405,7 @@ while True:
                             moved = True
                         elif current_space and not prev_space:
                             knight.attack_stationary(character, random.randint(1, 3))
+                            knight_hit.play()
                             knight.resize(200, 200)
                             moved = True
 
@@ -544,6 +550,7 @@ while True:
 
                                 knight.hp = max(0, knight.hp - 10)
                                 knight.took_damage = True
+                                hurt_sound.play()
 
                                 if not getattr(knight, "dead", False):
                                     try:
@@ -652,6 +659,7 @@ while True:
                                         if not blocked:
 
                                             knight.hp = max(0, knight.hp - 20)
+                                            hurt_sound.play()
                                             knight.took_damage = True
                                             try:
                                                 knight.change_animation(f"{character}/Hurt.png", 128, 128, play_once=True)
@@ -732,6 +740,7 @@ while True:
                                 if not blocked:
 
                                     knight.hp = max(0, knight.hp - 5)
+                                    hurt_sound.play()
                                     knight.took_damage = True
                                     try:
                                         knight.change_animation(f"{character}/Hurt.png", 128, 128, play_once=True)

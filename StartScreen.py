@@ -6,6 +6,7 @@ import time as pytime
 import json
 
 font.init()
+mixer.init()
 
 class Buttons():
 
@@ -47,8 +48,14 @@ ignore_until = 0
 
 quests_open = False
 
+background_music = mixer.Sound("menu_background_music.mp3")
+background_music.set_volume(0.3)
+
 def start_screen(window):
     global is_selected, move_delay, last_move, instructions_open, ignore_return_local, quests_open
+
+    if not mixer.get_busy():
+        background_music.play(-1)
 
     pressed = key.get_pressed()
     now_time = time.get_ticks()
@@ -107,6 +114,7 @@ def start_screen(window):
 
         if pressed[K_RETURN]:
             if is_selected == "play":
+                background_music.stop()
                 return False
             elif is_selected == "instructions":
                 instructions_open = instructions_menu(window)

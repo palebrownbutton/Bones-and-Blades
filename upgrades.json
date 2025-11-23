@@ -5,11 +5,11 @@
         "life spawn time": 60000
     },
     {
-        "total_xp": 0,
+        "total_xp": 8290,
         "upgrade_level": {
             "hp_upgrade": 1,
             "strength_upgrade": 1,
-            "life_spawn_time_upgrade": 1
+            "life_spawn_time_upgrade": 7
         },
         "required_xp": {
             "hp_required_xp": [

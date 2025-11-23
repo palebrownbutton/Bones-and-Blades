@@ -39,8 +39,8 @@
       ]
     },
     "isCompleted": [
-      false,
-      false,
+      true,
+      true,
       false,
       false,
       false,
@@ -51,8 +51,8 @@
       false
     ],
     "has_give_xp": [
-      false,
-      false,
+      true,
+      true,
       false,
       false,
       false,
@@ -63,7 +63,7 @@
       false
     ],
     "objectives": {
-      "skeletonsDefeated": 0,
+      "skeletonsDefeated": 21,
       "requiredSkeletons": [
         1,
         10,
@@ -170,17 +170,17 @@
       ]
     },
     "isCompleted": [
-      false,
+      true,
       false,
       false
     ],
     "has_give_xp": [
-      false,
+      true,
       false,
       false
     ],
     "objectives": {
-      "leftDefeated": 1,
+      "leftDefeated": 11,
       "requiredLeft": [
         10,
         50,
@@ -207,17 +207,17 @@
       ]
     },
     "isCompleted": [
-      false,
+      true,
       false,
       false
     ],
     "has_give_xp": [
-      false,
+      true,
       false,
       false
     ],
     "objectives": {
-      "rightDefeated": 0,
+      "rightDefeated": 11,
       "requiredRight": [
         10,
         50,
@@ -250,14 +250,14 @@
       ]
     },
     "isCompleted": [
-      false,
+      true,
       false,
       false,
       false,
       false
     ],
     "has_give_xp": [
-      false,
+      true,
       false,
       false,
       false,
@@ -290,12 +290,12 @@
       ]
     },
     "isCompleted": [
-      false,
-      false
+      true,
+      true
     ],
     "has_give_xp": [
-      false,
-      false
+      true,
+      true
     ],
     "objectives": {
       "requiredWaves": [
@@ -320,12 +320,12 @@
       ]
     },
     "isCompleted": [
-      false,
-      false
+      true,
+      true
     ],
     "has_give_xp": [
-      false,
-      false
+      true,
+      true
     ],
     "objectives": {
       "requiredWaves": [
@@ -350,16 +350,16 @@
       ]
     },
     "isCompleted": [
-      false,
+      true,
       false
     ],
     "has_give_xp": [
-      false,
+      true,
       false
     ],
     "objectives": {
-      "rightDefeated": 0,
-      "leftDefeated": 1,
+      "rightDefeated": 11,
+      "leftDefeated": 11,
       "requiredRight": [
         5,
         15
@@ -472,12 +472,12 @@
       ]
     },
     "isCompleted": [
-      false,
-      false
+      true,
+      true
     ],
     "has_give_xp": [
-      false,
-      false
+      true,
+      true
     ],
     "objectives": {
       "wavesDefeated": 0,
