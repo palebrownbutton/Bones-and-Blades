@@ -49,5 +49,14 @@
                 6765
             ]
         }
+    },
+    {
+        "sword": "wooden",
+        "sheild": "wooden",
+        "bonuses": {
+            "wood": 0,
+            "iron": 10,
+            "diamond": 20
+        }
     }
 ]

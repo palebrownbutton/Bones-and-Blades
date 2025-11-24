@@ -305,7 +305,6 @@ while True:
                 mixer.music.play(-1)
 
             current_time = time.get_ticks()
-            print(current_time)
 
             if not paused_game:
 

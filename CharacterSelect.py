@@ -2,6 +2,7 @@ from pygame import *
 from AnimatedSprite import *
 from KnightMovement import Knight
 from StillImage import *
+from Inventory import *
 
 class Background:
 
@@ -35,59 +36,72 @@ last_move = 0
 move_delay = 150
 
 house_button = StillImage(5, 10, 90, 90, "house.png")
+inventory_button = StillImage(705, 10, 90, 90, "inventory_button.png")
+
+inventory_open = False
 
 def select_character(window, ignore_return=False):
-    global position, last_move
+    global position, last_move, inventory_open
 
-    mouse_x, mouse_y = mouse.get_pos()
+    if not inventory_open:
 
-    background.draw(window)
+        mouse_x, mouse_y = mouse.get_pos()
 
-    box.draw(window)
+        background.draw(window)
 
-    knight1.draw(window)
-    knight2.draw(window)
-    knight3.draw(window)
+        box.draw(window)
 
-    house_button.draw(window)
+        knight1.draw(window)
+        knight2.draw(window)
+        knight3.draw(window)
 
-    pressed = key.get_pressed()
-    if ignore_return and pressed[K_RETURN]:
-        return None, False
-    now = time.get_ticks()
-    if pressed[K_LEFT] and now - last_move >= move_delay:
-        if position > 1:
-            position -= 1
-        else:
-            position = 3
-        last_move = now
-    elif pressed[K_RIGHT] and now - last_move >= move_delay:
-        if position < 3:
-            position += 1
-        else:
-            position = 1
-        last_move = now
+        house_button.draw(window)
+        inventory_button.draw(window)
 
-    if pressed[K_RETURN]:
-        if position == 1:
-            return "Knight_1", False
-        elif position == 2:
-            return "Knight_2", False
-        elif position == 3:
-            return "Knight_3", False
-        
-    if pressed[K_ESCAPE]:
-        return None, True
+        pressed = key.get_pressed()
+        if ignore_return and pressed[K_RETURN]:
+            return None, False
+        now = time.get_ticks()
+        if pressed[K_LEFT] and now - last_move >= move_delay:
+            if position > 1:
+                position -= 1
+            else:
+                position = 3
+            last_move = now
+        elif pressed[K_RIGHT] and now - last_move >= move_delay:
+            if position < 3:
+                position += 1
+            else:
+                position = 1
+            last_move = now
 
-    if position == 1:
-        box.rect.x = xpostions[0]
-    elif position == 2:
-        box.rect.x = xpostions[1]
-    elif position == 3:
-        box.rect.x = xpostions[2]
-
-    if (mouse_x >= house_button.rect.x and mouse_x <= house_button.rect.x + house_button.rect.width and mouse_y >= house_button.rect.y and mouse_y <= house_button.rect.y + house_button.rect.height):
-        if mouse.get_pressed()[0]:
+        if pressed[K_RETURN]:
+            if position == 1:
+                return "Knight_1", False
+            elif position == 2:
+                return "Knight_2", False
+            elif position == 3:
+                return "Knight_3", False
+            
+        if pressed[K_ESCAPE]:
             return None, True
+
+        if position == 1:
+            box.rect.x = xpostions[0]
+        elif position == 2:
+            box.rect.x = xpostions[1]
+        elif position == 3:
+            box.rect.x = xpostions[2]
+
+        if (mouse_x >= house_button.rect.x and mouse_x <= house_button.rect.x + house_button.rect.width and mouse_y >= house_button.rect.y and mouse_y <= house_button.rect.y + house_button.rect.height):
+            if mouse.get_pressed()[0]:
+                return None, True
+            
+        if (mouse_x >= inventory_button.rect.x and mouse_x <= inventory_button.rect.x + inventory_button.rect.width and mouse_y >= inventory_button.rect.y and mouse_y <= inventory_button.rect.y + inventory_button.rect.height):
+            if mouse.get_pressed()[0]:
+                inventory_open = inventory(window)
+
+    else:
+        inventory_open = inventory(window)
 
     return None, False
