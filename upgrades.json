@@ -57,6 +57,11 @@
             "wood": 0,
             "iron": 10,
             "diamond": 20
+        },
+        "required_xp": { 
+            "wooden": 0,
+            "iron": 100,
+            "diamond": 200
         }
     }
 ]

@@ -415,6 +415,7 @@
       "Kill 10 Warriors",
       "Kill 25 Warriors",
       "Kill 50 Warriors",
+      "Kill 75 Warriors",
       "Kill 100 Warriors",
       "Kill 200 Warriors"
     ],
@@ -422,10 +423,11 @@
       "xp": [
         300,
         600,
+        750,
         1000,
         1500,
         2000,
-        3000
+        2850
       ]
     },
     "isCompleted": [
