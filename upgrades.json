@@ -51,8 +51,18 @@
         }
     },
     {
-        "sword": "wooden",
-        "sheild": "wooden",
+        "type": {
+            "sword": "wooden",
+            "sheild": "wooden"
+        },
+        "unlocked": {
+            "wooden_sword": true,
+            "wooden_sheild": true,
+            "iron_sword": false,
+            "iron_sheild": false,
+            "diamond_sword": false,
+            "diamond_sheild": false
+        },
         "bonuses": {
             "wood": 0,
             "iron": 10,
