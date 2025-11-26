@@ -3,6 +3,7 @@ from AnimatedSprite import *
 from KnightMovement import Knight
 from StillImage import *
 from Inventory import *
+import Inventory as InventoryModule
 
 class Background:
 
@@ -39,13 +40,15 @@ house_button = StillImage(5, 10, 90, 90, "house.png")
 inventory_button = StillImage(705, 10, 90, 90, "inventory_button.png")
 
 inventory_open = False
+mouse_pressed = False
 
 def select_character(window, ignore_return=False):
-    global position, last_move, inventory_open
+    global position, last_move, inventory_open, mouse_pressed
 
     if not inventory_open:
 
         mouse_x, mouse_y = mouse.get_pos()
+        mouse_pressed = mouse.get_pressed()[0]
 
         background.draw(window)
 
@@ -93,15 +96,20 @@ def select_character(window, ignore_return=False):
         elif position == 3:
             box.rect.x = xpostions[2]
 
-        if (mouse_x >= house_button.rect.x and mouse_x <= house_button.rect.x + house_button.rect.width and mouse_y >= house_button.rect.y and mouse_y <= house_button.rect.y + house_button.rect.height):
-            if mouse.get_pressed()[0]:
-                return None, True
+        if InventoryModule.inventory_mouse_consumed:
+            if not mouse_pressed:
+                InventoryModule.inventory_mouse_consumed = False
+
+        elif (mouse_x >= house_button.rect.x and mouse_x <= house_button.rect.x + house_button.rect.width and mouse_y >= house_button.rect.y and mouse_y <= house_button.rect.y + house_button.rect.height) and mouse_pressed:
+            return None, True
             
-        if (mouse_x >= inventory_button.rect.x and mouse_x <= inventory_button.rect.x + inventory_button.rect.width and mouse_y >= inventory_button.rect.y and mouse_y <= inventory_button.rect.y + inventory_button.rect.height):
+        if (mouse_x >= inventory_button.rect.x and mouse_x <= inventory_button.rect.x + inventory_button.rect.width and mouse_y >= inventory_button.rect.y and mouse_y <= inventory_button.rect.y + inventory_button.rect.height) and mouse_pressed:
             if mouse.get_pressed()[0]:
-                inventory_open = inventory(window)
+                inventory_open = inventory(window, mouse_pressed)
 
     else:
-        inventory_open = inventory(window)
+        inventory_open = inventory(window, mouse_pressed)
+        if not inventory_open:
+            InventoryModule.inventory_mouse_consumed = True
 
     return None, False
