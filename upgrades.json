@@ -53,7 +53,7 @@
     {
         "type": {
             "sword": "wooden",
-            "sheild": "wooden"
+            "sheild": "diamond"
         },
         "unlocked": {
             "wooden_sword": true,

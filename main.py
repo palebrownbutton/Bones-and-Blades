@@ -88,12 +88,16 @@ with open("quest_list.json", "r") as file:
 with open("quest_list.json", "w") as file:
     json.dump(data, file, indent=2)
 
+has_updated_stats = False
+
 def game_reset():
-    global knight, character, skeletons, prev_space, prev_down, ignore_return, scorenum, max_skeletons, live_skeletons, hearts_manager, archers, max_archers, archers_active, background, background_switched, game_start_time, highscore_written, wave, new_wave, lost_a_heart, warriors, max_warriors
+    global knight, character, skeletons, prev_space, prev_down, ignore_return, scorenum, max_skeletons, live_skeletons, hearts_manager, archers, max_archers, archers_active, background, background_switched, game_start_time, highscore_written, wave, new_wave, lost_a_heart, warriors, max_warriors, has_updated_stats
 
     background = StillImage(0, 0, 800, 800, "background1.png")
     background_switched = False
     game_start_time = None
+
+    has_updated_stats = False
 
     wave = 1
     new_wave = True
@@ -282,6 +286,11 @@ while True:
 
             music = True
 
+            with open ("upgrades.json", "r") as file:
+                data = json.load(file)
+                knight.strength = data[0]["strength"]
+                knight.hp = data[0]["hp"]
+
             pressed = key.get_pressed()
             now = time.get_ticks()
             if pressed[K_ESCAPE] and now - esc_last >= esc_delay:
@@ -311,9 +320,12 @@ while True:
             if not paused_game:
 
                 current_time = time.get_ticks() - paused_time
-                print(current_time)
 
-                if current_time - heart_spawn_time > 10000 and hearts_manager.lives < 5 and not heart_spawned:
+                if not has_updated_stats:
+                    has_updated_stats = True
+                    print(knight.strength, knight.hp)
+
+                if current_time - heart_spawn_time > lives_rate and hearts_manager.lives < 5 and not heart_spawned:
                     heart_spawned = True
                     heart_spawn_time = current_time
                     hearts_manager.spawn_collectable(current_time)

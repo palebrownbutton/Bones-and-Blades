@@ -17,6 +17,9 @@ class Item(AnimatedSprite):
         self.sword =  data[2]["type"]["sword"]
         self.sheild = data[2]["type"]["sheild"]
 
+        self.strength = 0
+        self.hp = 0
+
     def change_item(self, new_type_sword, new_type_sheild):
 
         self.change_animation(f"Knight_1/Inventory/{new_type_sword}_{new_type_sheild}.png", self.w, self.h) 
@@ -30,6 +33,10 @@ with open ("upgrades.json", "r") as file:
 
 knight_custom = Item(f"Knight_1/Inventory/{data[2]['type']['sword']}_{data[2]['type']['sheild']}.png", 250, -300, 128, 128)
 knight_custom.resize(640, 640)
+
+# store the player's base stats so we can display base + equipment without accumulating repeatedly
+base_strength = data[0].get("strength", 0)
+base_hp = data[0].get("hp", 0)
 
 wooden_sword = StillImage(100, 370, 200, 200, "wooden_sword.png")
 iron_sword = StillImage(339, 410, 120, 120, "iron_sword.png")
@@ -77,7 +84,7 @@ mouse_was_pressed = False
 inventory_mouse_consumed = False
 
 def inventory(window, mouse_pressed):
-    global mouse_was_pressed, inventory_mouse_consumed
+    global mouse_was_pressed, inventory_mouse_consumed, base_strength, base_hp
 
     mouse_x, mouse_y = mouse.get_pos()
     current_mouse_pressed = mouse.get_pressed()[0]
@@ -101,29 +108,50 @@ def inventory(window, mouse_pressed):
 
     if (mouse_x >= wooden_sword.rect.x and mouse_x <= wooden_sword.rect.x + wooden_sword.rect.width and mouse_y >= wooden_sword.rect.y and mouse_y <= wooden_sword.rect.y + wooden_sword.rect.height):
         if current_mouse_pressed:
+
             knight_custom.change_item("wooden", knight_custom.sheild)
+            # assign the equipment bonus directly
+            knight_custom.strength = data[2]["bonuses"]["wood"]
             data[2]["type"]["sword"] = "wooden"
+
     if (mouse_x >= iron_sword.rect.x and mouse_x <= iron_sword.rect.x + iron_sword.rect.width and mouse_y >= iron_sword.rect.y and mouse_y <= iron_sword.rect.y + iron_sword.rect.height):
         if current_mouse_pressed and unlocked["iron_sword"]:
+
             knight_custom.change_item("iron", knight_custom.sheild)
+            knight_custom.strength = data[2]["bonuses"]["iron"]
             data[2]["type"]["sword"] = "iron"
+
     if (mouse_x >= diamond_sword.rect.x and mouse_x <= diamond_sword.rect.x + diamond_sword.rect.width and mouse_y >= diamond_sword.rect.y and mouse_y <= diamond_sword.rect.y + diamond_sword.rect.height):
         if current_mouse_pressed and unlocked["diamond_sword"]:
+
             knight_custom.change_item("diamond", knight_custom.sheild)
+            knight_custom.strength = data[2]["bonuses"]["diamond"]
             data[2]["type"]["sword"] = "diamond"
 
     if (mouse_x >= wooden_sheild.rect.x and mouse_x <= wooden_sheild.rect.x + wooden_sheild.rect.width and mouse_y >= wooden_sheild.rect.y and mouse_y <= wooden_sheild.rect.y + wooden_sheild.rect.height):
         if current_mouse_pressed:
+
             knight_custom.change_item(knight_custom.sword, "wooden")
+            knight_custom.hp = data[2]["bonuses"]["wood"]
             data[2]["type"]["sheild"] = "wooden"
+
     if (mouse_x >= iron_sheild.rect.x and mouse_x <= iron_sheild.rect.x + iron_sheild.rect.width and mouse_y >= iron_sheild.rect.y and mouse_y <= iron_sheild.rect.y + iron_sheild.rect.height):
         if current_mouse_pressed and unlocked["iron_sheild"]:
+
             knight_custom.change_item(knight_custom.sword, "iron")
+            knight_custom.hp = data[2]["bonuses"]["iron"]
             data[2]["type"]["sheild"] = "iron"
+
     if (mouse_x >= diamond_sheild.rect.x and mouse_x <= diamond_sheild.rect.x + diamond_sheild.rect.width and mouse_y >= diamond_sheild.rect.y and mouse_y <= diamond_sheild.rect.y + diamond_sheild.rect.height):
         if current_mouse_pressed and unlocked["diamond_sheild"]:
+
             knight_custom.change_item(knight_custom.sword, "diamond")
+            knight_custom.hp = data[2]["bonuses"]["diamond"]
             data[2]["type"]["sheild"] = "diamond"
+
+    # Update displayed player stats from base + equipment (do not accumulate each frame)
+    data[0]["strength"] = base_strength + knight_custom.strength
+    data[0]["hp"] = base_hp + knight_custom.hp
 
     if (mouse_x >= back_arrow.rect.x and mouse_x <= back_arrow.rect.x + back_arrow.rect.width and mouse_y >= back_arrow.rect.y and mouse_y <= back_arrow.rect.y + back_arrow.rect.height) and click:
         with open ("upgrades.json", "w") as file:
