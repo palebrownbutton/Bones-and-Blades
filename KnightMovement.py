@@ -1,6 +1,7 @@
 from pygame import *
 from AnimatedSprite import *
 import json
+from ResourceManager import *
 
 class Knight(AnimatedSprite):
 
@@ -8,7 +9,7 @@ class Knight(AnimatedSprite):
         super().__init__(sprite_sheet, x, y, w, h)
         self.knight_number = knight_number
 
-        with open ("upgrades.json", "r") as file:
+        with open (resource_path("upgrades.json"), "r") as file:
             attributes = json.load(file)
 
         self.velocity_y = 0
@@ -39,7 +40,7 @@ class Knight(AnimatedSprite):
         self.play_once_done = False
 
         try:
-            self.change_animation(f"{character}/Dead.png", 128, 128, play_once=True)
+            self.change_animation(resource_path(f"{character}/Dead.png"), 128, 128, play_once=True)
         except Exception:
             pass
         try:
@@ -75,7 +76,7 @@ class Knight(AnimatedSprite):
         if self.rect.x > -117:
             self.rect.x -= 7
         if not getattr(self, "attacking", False):
-            self.change_animation(f"{knight_number}/Run.png", 128, 128)
+            self.change_animation(resource_path(f"images/{knight_number}/Run.png"), 128, 128)
 
     def move_right(self, knight_number):
 
@@ -86,7 +87,7 @@ class Knight(AnimatedSprite):
         if self.rect.x < 710:
             self.rect.x += 7
         if not getattr(self, "attacking", False):
-            self.change_animation(f"{knight_number}/Run.png", 128, 128)
+            self.change_animation(resource_path(f"images/{knight_number}/Run.png"), 128, 128)
 
     def jump(self, knight_number):
 
@@ -95,7 +96,7 @@ class Knight(AnimatedSprite):
             self.play_once = False
             self.play_once_done = False
 
-        self.change_animation(f"{knight_number}/Jump.png", 128, 128)
+        self.change_animation(resource_path(f"images/{knight_number}/Jump.png"), 128, 128)
         self.velocity_y = -10
         self.on_ground = False
 
@@ -104,7 +105,7 @@ class Knight(AnimatedSprite):
         if getattr(self, "attacking", False):
             return
 
-        self.change_animation(f"{knight_number}/Attack {attack_type}.png", 128, 128, play_once=True)
+        self.change_animation(resource_path(f"images/{knight_number}/Attack {attack_type}.png"), 128, 128, play_once=True)
         self.attacking = True
 
     def attack_moving(self, knight_number):
@@ -112,7 +113,7 @@ class Knight(AnimatedSprite):
         if getattr(self, "attacking", False):
             return
 
-        self.change_animation(f"{knight_number}/Run+Attack.png", 128, 128, play_once=True)
+        self.change_animation(resource_path(f"images/{knight_number}/Run+Attack.png"), 128, 128, play_once=True)
         self.attacking = True
 
     def defend(self, knight_number):
@@ -120,7 +121,7 @@ class Knight(AnimatedSprite):
         if getattr(self, "attacking", False):
             return
 
-        self.change_animation(f"{knight_number}/Protect.png", 128, 128, play_once=True)
+        self.change_animation(resource_path(f"images/{knight_number}/Protect.png"), 128, 128, play_once=True)
         self.attacking = True
 
     def defend_start(self, knight_number):
@@ -129,7 +130,7 @@ class Knight(AnimatedSprite):
             return
 
         self.defending = True
-        self.change_animation(f"{knight_number}/Protect.png", 128, 128, play_once=False)
+        self.change_animation(resource_path(f"images/{knight_number}/Protect.png"), 128, 128, play_once=False)
 
     def defend_stop(self, knight_number):
 
@@ -137,4 +138,4 @@ class Knight(AnimatedSprite):
             return
 
         self.defending = False
-        self.change_animation(f"{knight_number}/Idle.png", 128, 128)
+        self.change_animation(resource_path(f"images/{knight_number}/Idle.png"), 128, 128)

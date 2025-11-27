@@ -1,9 +1,10 @@
 from pygame import *
 import json
+from ResourceManager import *
 
 def quest_list1():
 
-    with open ("quest_list.json", "r") as file:
+    with open (resource_path("quest_list.json"), "r") as file:
 
         quest_data = json.load(file)
 
@@ -21,13 +22,13 @@ def quest_list1():
 
 def quest_list2():
 
-    with open ("quest_list.json", "r") as file:
+    with open (resource_path("quest_list.json"), "r") as file:
 
         return json.load(file)
 
 def quest_list3():
 
-    with open("quest_list.json", "r") as file:
+    with open(resource_path("quest_list.json"), "r") as file:
         
         quests = {int(k): v for k, v in json.load(file).items()}#
     return quests
@@ -163,10 +164,10 @@ def quest_update(enemy_type, direction, wave, current_archers, current_skeletons
 
         quest_level.update(quest)
 
-    with open ("quest_list.json", "w") as file:
+    with open (resource_path("quest_list.json"), "w") as file:
         json.dump({str(k): v for k, v in quests.items()}, file, indent=2)
     
-    with open("upgrades.json", "r+") as file:
+    with open(resource_path("upgrades.json"), "r+") as file:
         data = json.load(file)
         data[1]["total_xp"] += xp
         file.seek(0)

@@ -5,6 +5,7 @@ import random
 import json
 import math as pymath
 from QuestReader import *
+from ResourceManager import *
 
 arrows = []
 can_shoot = False
@@ -43,7 +44,7 @@ class Enemy(AnimatedSprite):
         self.death_timer = 0
 
         try:
-            self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+            self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
         except Exception:
             pass
 
@@ -57,7 +58,7 @@ class Enemy(AnimatedSprite):
             self.play_once = False
             self.play_once_done = False
             try:
-                self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
             except Exception:
                 pass
 
@@ -102,7 +103,7 @@ class Enemy(AnimatedSprite):
         self.death_timer = 0
 
         try:
-            self.change_animation(f"{enemy_type}/Dead.png", 128, 128, play_once=True)
+            self.change_animation(resource_path(f"images/{enemy_type}/Dead.png"), 128, 128, play_once=True)
         except Exception:
             pass
         try:
@@ -124,14 +125,14 @@ class Skeleton(Enemy):
                 self.rect.x -= 2
                 if not getattr(self, "attacking", False):
                     try:
-                        self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                        self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
                     except Exception:
                         pass
             else:
                 self.rect.x += 2
                 if not getattr(self, "attacking", False):
                     try:
-                        self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                        self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
                     except Exception:
                         pass
         
@@ -142,14 +143,14 @@ class Skeleton(Enemy):
                 self.rect.x += 2
                 if not getattr(self, "attacking", False):
                     try:
-                        self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                        self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
                     except Exception:
                         pass
             else:
                 self.rect.x -= 2
                 if not getattr(self, "attacking", False):
                     try:
-                        self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                        self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
                     except Exception:
                         pass
                 
@@ -159,12 +160,12 @@ class Skeleton(Enemy):
         attack_type = random.randint(1, 2)
         if attack_type == 1:
             try:
-                self.change_animation(f"{enemy_type}/Attack_1.png", 128, 128, play_once=True)
+                self.change_animation(resource_path(f"images/{enemy_type}/Attack_1.png"), 128, 128, play_once=True)
             except Exception:
                 pass
         else:
             try:
-                self.change_animation(f"{enemy_type}/Attack_2.png", 128, 128, play_once=True)
+                self.change_animation(resource_path(f"images/{enemy_type}/Attack_2.png"), 128, 128, play_once=True)
             except Exception:
                 pass
 
@@ -188,14 +189,14 @@ class Archer(Enemy):
         if self.rect.x < -75:
             self.rect.x += 2
             try:
-                self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
             except Exception:
                 pass
             return
         if self.rect.x > 880:
             self.rect.x -= 2
             try:
-                self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
             except Exception:
                 pass
             return
@@ -210,7 +211,7 @@ class Archer(Enemy):
                 self.rect.x -= 2
                 self.direction = "left"
             try:
-                self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
             except Exception:
                 pass
             return
@@ -221,7 +222,7 @@ class Archer(Enemy):
             self.direction = "left"
 
         try:
-            self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+            self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
         except Exception:
             pass
         
@@ -234,7 +235,7 @@ class Archer(Enemy):
 
         self.target_pos = getattr(self, "target_pos", None)
         try:
-            self.change_animation(f"{enemy_type}/Shot_1.png", 128, 128, play_once=True)
+            self.change_animation(resource_path(f"images/{enemy_type}/Shot_1.png"), 128, 128, play_once=True)
         except Exception:
             pass
     
@@ -249,7 +250,7 @@ class Archer(Enemy):
             else:
                 spawn_x = self.rect.left - arrow_w + 10
             spawn_y = self.rect.y + 90
-            arrow = Arrows(spawn_x, spawn_y, arrow_w, arrow_h, "arrow.png", direction=self.direction, target_pos=getattr(self, "target_pos", None))
+            arrow = Arrows(spawn_x, spawn_y, arrow_w, arrow_h, resource_path("images/arrow.png"), direction=self.direction, target_pos=getattr(self, "target_pos", None))
             arrows.append(arrow)
             self.arrow_fired = True
             self.arrow_fired = True
@@ -302,14 +303,14 @@ class Warrior(Enemy):
                 self.rect.x -= 2
                 if not getattr(self, "attacking", False):
                     try:
-                        self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                        self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
                     except Exception:
                         pass
             else:
                 self.rect.x += 2
                 if not getattr(self, "attacking", False):
                     try:
-                        self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                        self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
                     except Exception:
                         pass
         
@@ -320,14 +321,14 @@ class Warrior(Enemy):
                 self.rect.x += 2
                 if not getattr(self, "attacking", False):
                     try:
-                        self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                        self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
                     except Exception:
                         pass
             else:
                 self.rect.x -= 2
                 if not getattr(self, "attacking", False):
                     try:
-                        self.change_animation(f"{enemy_type}/Run.png", 128, 128)
+                        self.change_animation(resource_path(f"images/{enemy_type}/Run.png"), 128, 128)
                     except Exception:
                         pass
 
@@ -339,7 +340,7 @@ class Warrior(Enemy):
             self.play_once = False
             self.play_once_done = False
             try:
-                self.change_animation("Skeleton_Warrior/Idle.png", 128, 128)
+                self.change_animation(resource_path("images/Skeleton_Warrior/Idle.png"), 128, 128)
             except Exception:
                 pass
 
@@ -355,7 +356,7 @@ class Warrior(Enemy):
                 self.last_attack_time = current_time
                 attack_type = random.randint(1, 3)
                 try:
-                    self.change_animation(f"Skeleton_Warrior/Attack_{attack_type}.png", 128, 128, play_once=True)
+                    self.change_animation(resource_path(f"images/Skeleton_Warrior/Attack_{attack_type}.png"), 128, 128, play_once=True)
                 except Exception:
                     pass
 
@@ -364,7 +365,7 @@ class Warrior(Enemy):
             self.defending = True
             self.last_defend_time = current_time
             try:
-                self.change_animation("Skeleton_Warrior/Protect.png", 128, 128, play_once=True)
+                self.change_animation(resource_path("images/Skeleton_Warrior/Protect.png"), 128, 128, play_once=True)
             except Exception:
                 pass
 
@@ -376,7 +377,7 @@ class Warrior(Enemy):
         self.attacking = True
         attack_type = random.randint(1, 3)
         try:
-            self.change_animation(f"{enemy_type}/Attack_{attack_type}.png", 128, 128, play_once=True)
+            self.change_animation(resource_path(f"images/{enemy_type}/Attack_{attack_type}.png"), 128, 128, play_once=True)
         except Exception:
             pass
 
@@ -387,7 +388,7 @@ class Warrior(Enemy):
             self.last_defend_time = time.get_ticks()
             self.attack_after_defend = False
             try:
-                self.change_animation("Skeleton_Warrior/Protect.png", 128, 128, play_once=True)
+                self.change_animation(resource_path("images/Skeleton_Warrior/Protect.png"), 128, 128, play_once=True)
             except Exception:
                 pass
     

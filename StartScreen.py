@@ -4,6 +4,7 @@ from StillImage import StillImage, TextRender
 from QuestReader import *
 import time as pytime
 import json
+from ResourceManager import *
 
 font.init()
 mixer.init()
@@ -28,15 +29,15 @@ class Buttons():
             ghost_image.set_alpha(30)
             window.blit(ghost_image, (self.rect.x, self.rect.y))
 
-play = Buttons(120, 170, 550, 550, "start_button.png", "play")
-instructions_button = Buttons(100, 430, 600, 600, "instructions_button.png", "instructions")
-start_view_quests = Buttons(100, 300, 600, 600, "progress.png", "view_quests")
-background = StillImage(0, 0, 800, 800, "select_background.png")
+play = Buttons(120, 170, 550, 550, resource_path("images/start_button.png"), "play")
+instructions_button = Buttons(100, 430, 600, 600, resource_path("images/instructions_button.png"), "instructions")
+start_view_quests = Buttons(100, 300, 600, 600, resource_path("images/progress.png"), "view_quests")
+background = StillImage(0, 0, 800, 800, resource_path("images/select_background.png"))
 
 text1 = TextRender("Arial", 50, (255, 255, 255), "Welcome to Bones and Blades!")
 text2 = TextRender("Arial", 30, (255, 255, 255), "By Simona")
 
-logo = StillImage(303, 160, 200, 200, "Bones and Blades Logo.png")
+logo = StillImage(303, 160, 200, 200, resource_path("images/Bones and Blades Logo.png"))
 
 is_selected = "play"
 last_move = 0
@@ -48,7 +49,7 @@ ignore_until = 0
 
 quests_open = False
 
-background_music = mixer.Sound("menu_background_music.mp3")
+background_music = mixer.Sound(resource_path("sounds/menu_background_music.mp3"))
 background_music.set_volume(0.3)
 
 def start_screen(window):
@@ -128,9 +129,9 @@ def start_screen(window):
     
     return True
 
-instructions = StillImage(0, 195, 800, 533, "instructions.png")
+instructions = StillImage(0, 195, 800, 533, resource_path("images/instructions.png"))
 instructionstxt = TextRender(None, 70, (255, 255, 255), "Instructions")
-house_button = StillImage(5, 10, 90, 90, "house.png")
+house_button = StillImage(5, 10, 90, 90, resource_path("images/house.png"))
 
 def instructions_menu(window):
     global instructions_open, ignore_return_local, ignore_until
@@ -185,8 +186,8 @@ for idx, (quest_id, quest) in enumerate(quests.items()):
 
 quest_list_word_text = TextRender(None, 100, (255, 255, 255), "Quests:")
 
-padlock = StillImage(555, 20, 60, 60, "padlock.png")
-upgrades_button = StillImage(550, -100, 300, 300, "upgrades.png")
+padlock = StillImage(555, 20, 60, 60, resource_path("images/padlock.png"))
+upgrades_button = StillImage(550, -100, 300, 300, resource_path("images/upgrades.png"))
 
 quests_boxes = []
 total_levels = sum(len(quest["title"]) for quest in quests.values())
@@ -308,7 +309,7 @@ rect3 = Rect(550, 155, 200, 450)
 overlay3 = Surface(rect3.size, SRCALPHA)
 overlay3.fill((62, 64, 63, 180))
 
-with open("upgrades.json", "r") as file:
+with open(resource_path("upgrades.json"), "r") as file:
     knight_attributes = json.load(file)[0]
 
 rendered_hp_text = TextRender(None, 30, (255, 255, 255), "HP:") 
@@ -318,11 +319,11 @@ rendered_strength_num = TextRender(None, 60, (255, 255, 255), f"{knight_attribut
 rendered_lives_rate = TextRender(None, 30, (255, 255, 255), "Lives spawn rate:")
 rendered_lives_rate_num = TextRender(None, 60, (255, 255, 255), f"{int(knight_attributes['life spawn time']/1000)} s")
 
-strength_icon = StillImage(40, 173, 228, 130, "strength_image.png")
-hp_icon = StillImage(333, 175, 130, 130, "hearts.png")
-lives_rate_icon = StillImage(577, 160, 155, 155, "clock.png")
+strength_icon = StillImage(40, 173, 228, 130, resource_path("images/strength_image.png"))
+hp_icon = StillImage(333, 175, 130, 130, resource_path("images/hearts.png"))
+lives_rate_icon = StillImage(577, 160, 155, 155, resource_path("images/clock.png"))
 
-with open ("upgrades.json", "r") as file:
+with open (resource_path("upgrades.json"), "r") as file:
     data = json.load(file)
     total_xp = data[1]["total_xp"]
     hp_upgrade_level = data[1]["upgrade_level"]["hp_upgrade"]
@@ -341,11 +342,11 @@ rendered_hp_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{hp_required
 rendered_strength_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{strength_required_xp}")
 rendered_lives_rate_required_xp_text = TextRender(None, 30, (44, 59, 64), f"{lives_rate_required_xp}")
 
-back_arrow = StillImage(5, 10, 90, 90, "back_arrow.png")
+back_arrow = StillImage(5, 10, 90, 90, resource_path("images/back_arrow.png"))
 
 benefits = []
 for i in range(3):
-    benefit = StillImage(62 + (i * 250), 470, 175, 175, "yes_benefits_button.png")
+    benefit = StillImage(62 + (i * 250), 470, 175, 175, resource_path("images/yes_benefits_button.png"))
     benefits.append(benefit)
 
 def recalc_upgrade_text():
@@ -412,9 +413,9 @@ def upgrade_menu(window):
         
         if can_upgrade:
             if cost <= total_xp:
-                benefit.set_image("yes_benefits_button.png")
+                benefit.set_image(resource_path("images/yes_benefits_button.png"))
             else:
-                benefit.set_image("no_benefits_button.png")
+                benefit.set_image(resource_path("images/no_benefits_button.png"))
             benefit.draw(window)
 
             if (mouse_pressed and not benefit_cooldown and cost <= total_xp and benefit.rect.collidepoint(mouse_x, mouse_y)):
@@ -483,10 +484,10 @@ def upgrade_menu(window):
     data[1]["upgrade_level"]["life_spawn_time_upgrade"] = lives_rate_upgrade_level
     data[1]["total_xp"] = total_xp
 
-    with open("upgrades.json", "w") as file:
+    with open(resource_path("upgrades.json"), "w") as file:
         json.dump(data, file, indent=4)
 
-    with open("upgrades.json", "r") as file:
+    with open(resource_path("upgrades.json"), "r") as file:
         data = json.load(file)
         total_xp = data[1]["total_xp"]
 
@@ -496,21 +497,21 @@ def upgrade_menu(window):
 
     return True
 
-playAgian = Buttons(100, 200, 600, 600, "play_again_button.png", "playAgain")
+playAgian = Buttons(100, 200, 600, 600, resource_path("images/play_again_button.png"), "playAgain")
 
-home = Buttons(100, 380, 600, 600, "home_button.png", "home")
+home = Buttons(100, 380, 600, 600, resource_path("images/home_button.png"), "home")
 rendered_game_over = TextRender(None, 150, (255, 0, 0), "Game Over...")
 
-with open ("highscore.txt", 'r') as file:
+with open (resource_path("highscore.txt"), 'r') as file:
     lines = file.readlines()
     numbers = [int(line.strip()) for line in lines if line.strip().isdigit()]
 highscore = max(numbers) if numbers else 0
 rendered_highscore = TextRender(None, 50, (255, 255, 255), f"High Score: {highscore}")
 
-pause_box = StillImage(-5, -30, 800, 900, "pause_box.png")
-continue_gameplay = Buttons(200, 130, 400, 400, "continue_button.png", "continue_gameplay")
-pause_view_quests = Buttons(200, 220, 400, 400, "view_quests_button.png", "view_quests")
-exit_gameplay = Buttons(200, 310, 400, 400, "exit_gameplay_button.png", "exit_gameplay")
+pause_box = StillImage(-5, -30, 800, 900, resource_path("images/pause_box.png"))
+continue_gameplay = Buttons(200, 130, 400, 400, resource_path("images/continue_button.png"), "continue_gameplay")
+pause_view_quests = Buttons(200, 220, 400, 400, resource_path("images/view_quests_button.png"), "view_quests")
+exit_gameplay = Buttons(200, 310, 400, 400, resource_path("images/exit_gameplay_button.png"), "exit_gameplay")
 
 view_quests = False
 

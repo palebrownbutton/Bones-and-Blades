@@ -4,6 +4,7 @@ from KnightMovement import Knight
 from StillImage import *
 from Inventory import *
 import Inventory as InventoryModule
+from ResourceManager import *
 
 class Background:
 
@@ -19,25 +20,25 @@ class Background:
         window.blit(self.image, (self.rect.x, self.rect.y))
 
 
-knight1 = Knight("Knight_1/Idle.png", -10, -50, 128, 128, "Knight_1")
+knight1 = Knight(resource_path("images/Knight_1/Idle.png"), -10, -50, 128, 128, "Knight_1")
 knight1.resize(640, 640)
-knight2 = Knight("Knight_2/Idle.png", 240, -50, 128, 128, "Knight_2")
+knight2 = Knight(resource_path("images/Knight_2/Idle.png"), 240, -50, 128, 128, "Knight_2")
 knight2.resize(640, 640)
-knight3 = Knight("Knight_3/Idle.png", 490, -50, 128, 128, "Knight_3")
+knight3 = Knight(resource_path("images/Knight_3/Idle.png"), 490, -50, 128, 128, "Knight_3")
 knight3.resize(640, 640)
 
-background = Background(0, 0, 800, 800, "select_background.png")
+background = Background(0, 0, 800, 800, resource_path("images/select_background.png"))
 
 xpostions = [-65, 186, 436]
-box = Background(xpostions[1], 170, 450, 500, "select_box.png")
+box = Background(xpostions[1], 170, 450, 500, resource_path("images/select_box.png"))
 
 position = 2
 
 last_move = 0
 move_delay = 150
 
-house_button = StillImage(5, 10, 90, 90, "house.png")
-inventory_button = StillImage(705, 10, 90, 90, "inventory_button.png")
+house_button = StillImage(5, 10, 90, 90, resource_path("images/house.png"))
+inventory_button = StillImage(705, 10, 90, 90, resource_path("images/inventory_button.png"))
 
 inventory_open = False
 mouse_pressed = False

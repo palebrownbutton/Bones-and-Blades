@@ -10,6 +10,7 @@ import StartScreen
 from EnemyMovement import *
 from ImageEffects import *
 from Collectables import *
+from ResourceManager import *
 
 init()
 font.init()
@@ -18,17 +19,17 @@ mixer.init()
 window = display.set_mode((800, 800))
 clock = time.Clock()
 
-mixer.music.load("game_play.mp3")
-hurt_sound = mixer.Sound("hurt_sound.mp3")
+mixer.music.load(resource_path("sounds/game_play.mp3"))
+hurt_sound = mixer.Sound(resource_path("sounds/hurt_sound.mp3"))
 hurt_sound.set_volume(0.1)
-knight_hit = mixer.Sound("knight_hit_sound.mp3")
+knight_hit = mixer.Sound(resource_path("sounds/knight_hit_sound.mp3"))
 knight_hit.set_volume(0.1)
 
 wave = 1
 new_wave = False
 lost_a_heart = False
 
-knight = Knight("Knight_1/Idle.png", 350, 590, 128, 128, "Knight_1")
+knight = Knight(resource_path("images/Knight_1/Idle.png"), 350, 590, 128, 128, "Knight_1")
 knight.resize(200, 200)
 character = None
 prev_space = False
@@ -42,21 +43,21 @@ skeletons = []
 max_skeletons = 3
 live_skeletons = 3
 for i in range(live_skeletons):
-    skeleton = Skeleton("Skeleton_Spearman/Idle.png", -200, 590, 128, 128, "Skeleton_Spearman")
+    skeleton = Skeleton(resource_path("images/Skeleton_Spearman/Idle.png"), -200, 590, 128, 128, "Skeleton_Spearman")
     skeleton.spawn("Skeleton_Spearman", 60 * wave)
     skeletons.append(skeleton)
 
 archers = []
 max_archers = 2
 for i in range(max_archers):
-    archer = Archer("Skeleton_Archer/Idle.png", -200, 590, 128, 128, "Skeleton_Archer")
+    archer = Archer(resource_path("images/Skeleton_Archer/Idle.png"), -200, 590, 128, 128, "Skeleton_Archer")
     archer.spawn("Skeleton_Archer", 65 * wave)
     archers.append(archer)
 
 warriors = []
 max_warriors = 3
 for i in range(max_warriors):
-    warrior = Warrior("Skeleton_Warrior/Idle.png", -200, 590, 128, 128, "Skeleton_Warrior")
+    warrior = Warrior(resource_path("images/Skeleton_Warrior/Idle.png"), -200, 590, 128, 128, "Skeleton_Warrior")
     warrior.spawn("Skeleton_Warrior", 70 * wave)
     warriors.append(warrior)
 
@@ -77,7 +78,7 @@ for warrior in warriors:
 
 archers_active = False
 
-background = StillImage(0, 0, 800, 800, "background1.png")
+background = StillImage(0, 0, 800, 800, resource_path("images/background1.png"))
 background_switched = False
 
 with open("quest_list.json", "r") as file:
@@ -93,7 +94,7 @@ has_updated_stats = False
 def game_reset():
     global knight, character, skeletons, prev_space, prev_down, ignore_return, scorenum, max_skeletons, live_skeletons, hearts_manager, archers, max_archers, archers_active, background, background_switched, game_start_time, highscore_written, wave, new_wave, lost_a_heart, warriors, max_warriors, has_updated_stats
 
-    background = StillImage(0, 0, 800, 800, "background1.png")
+    background = StillImage(0, 0, 800, 800, resource_path("images/background1.png"))
     background_switched = False
     game_start_time = None
 
@@ -103,7 +104,12 @@ def game_reset():
     new_wave = True
     lost_a_heart = False
 
-    knight = Knight("Knight_1/Idle.png", 350, 590, 128, 128, "Knight_1")
+    with open (resource_path("upgrades.json"), "r") as file:
+                data = json.load(file)
+                knight.strength = data[0]["strength"]
+                knight.hp = data[0]["hp"]
+
+    knight = Knight(resource_path("images/Knight_1/Idle.png"), 350, 590, 128, 128, "Knight_1")
     knight.resize(200, 200)
     character = None
     prev_space = False
@@ -115,21 +121,21 @@ def game_reset():
     live_skeletons = 3
     max_skeletons = 3
     for i in range(live_skeletons):
-        skeleton = Skeleton("Skeleton_Spearman/Idle.png", -200, 590, 128, 128, "Skeleton_Spearman")
+        skeleton = Skeleton(resource_path("images/Skeleton_Spearman/Idle.png"), -200, 590, 128, 128, "Skeleton_Spearman")
         skeleton.spawn("Skeleton_Spearman", 60 * wave)
         skeletons.append(skeleton)
 
     archers = []
     max_archers = 2
     for i in range(max_archers):
-        archer = Archer("Skeleton_Archer/Idle.png", -200, 590, 128, 128, "Skeleton_Archer")
+        archer = Archer(resource_path("images/Skeleton_Archer/Idle.png"), -200, 590, 128, 128, "Skeleton_Archer")
         archer.spawn("Skeleton_Archer", 65 * wave)
         archers.append(archer)
 
     warriors = []
     max_warriors = 3
     for i in range(max_warriors):
-        warrior = Warrior("Skeleton_Warrior/Idle.png", -200, 590, 128, 128, "Skeleton_Warrior")
+        warrior = Warrior(resource_path("images/Skeleton_Warrior/Idle.png"), -200, 590, 128, 128, "Skeleton_Warrior")
         warrior.spawn("Skeleton_Warrior", 70 * wave)
         warriors.append(warrior)
 
@@ -150,7 +156,7 @@ def game_reset():
     except Exception:
         pass
 
-    with open ("upgrades.json") as file:
+    with open (resource_path("upgrades.json")) as file:
         data = json.load(file)[1]
         lives_rate = data["upgrade_level"]["life_spawn_time_upgrade"]
     hearts_manager = Hearts(lives_rate)
@@ -164,9 +170,9 @@ def game_reset():
 
 is_home = True
 
-lives_image = StillImage(5, -40, 128, 128, "lives.png")
+lives_image = StillImage(5, -40, 128, 128, resource_path("images/lives.png"))
 
-with open ("upgrades.json") as file:
+with open (resource_path("upgrades.json")) as file:
     data = json.load(file)[1]
     lives_rate = data["upgrade_level"]["life_spawn_time_upgrade"]
 hearts_manager = Hearts(lives_rate)
@@ -175,14 +181,14 @@ collectibles = []
 
 scorenum = 0
 scorenumtxt = font.SysFont("Arial", 45)
-scorepic = StillImage(0, 10, 140, 140, "score.png")
+scorepic = StillImage(0, 10, 140, 140, resource_path("images/score.png"))
 
 last_spawn_time = time.get_ticks()
 archer_spawn_time = time.get_ticks()
 game_start_time = None
 
 heart_spawn_time = time.get_ticks()
-with open ("upgrades.json") as file:
+with open (resource_path("upgrades.json")) as file:
     data = json.load(file)[1]
     lives_rate = data["upgrade_level"]["life_spawn_time_upgrade"]
 
@@ -191,7 +197,7 @@ heart_spawned = False
 strength_spawn_time = time.get_ticks()
 
 try:
-    with open ("highscore.txt", "r") as file:
+    with open (resource_path("highscore.txt"), "r") as file:
         lines = file.readlines()
         numbers = [int(line.strip()) for line in lines if line.strip().isdigit()]
     highscore = max(numbers) if numbers else 0
@@ -212,6 +218,8 @@ esc_last = 0
 esc_delay = 150
 
 paused_time = 0
+
+heart_spawned_timer_started = False
 
 archer_last_spawn_time = time.get_ticks()
 archers_active = False
@@ -286,11 +294,6 @@ while True:
 
             music = True
 
-            with open ("upgrades.json", "r") as file:
-                data = json.load(file)
-                knight.strength = data[0]["strength"]
-                knight.hp = data[0]["hp"]
-
             pressed = key.get_pressed()
             now = time.get_ticks()
             if pressed[K_ESCAPE] and now - esc_last >= esc_delay:
@@ -324,10 +327,15 @@ while True:
                 if not has_updated_stats:
                     has_updated_stats = True
 
-                if current_time - heart_spawn_time > lives_rate and hearts_manager.lives < 5 and not heart_spawned:
-                    heart_spawned = True
+                if hearts_manager.lives < 5 and not heart_spawned:
                     heart_spawn_time = current_time
-                    hearts_manager.spawn_collectable(current_time)
+                    heart_spawned_timer_started = True
+
+                if hearts_manager.lives < 5 and not heart_spawned:
+                    if current_time - heart_spawn_time > lives_rate:
+                        heart_spawned = True
+                        heart_spawn_time = current_time
+                        hearts_manager.spawn_collectable(current_time)
 
                 if current_time - strength_spawn_time > (random.randint(30000, 120000)) and potion.active == False:
                     strength_spawn_time = current_time
@@ -339,7 +347,7 @@ while True:
                     max_skeletons += 1
                     for i in range(max_skeletons - live_skeletons + 1):
                         if len(skeletons) <= 6:
-                            skeleton = Skeleton("Skeleton_Spearman/Idle.png", -200, 590, 128, 128, "Skeleton_Spearman")
+                            skeleton = Skeleton(resource_path("images/Skeleton_Spearman/Idle.png"), -200, 590, 128, 128, "Skeleton_Spearman")
                             skeleton.spawn("Skeleton_Spearman", 60 * wave)
                             skeletons.append(skeleton)
                         else:
@@ -349,7 +357,7 @@ while True:
                     archer_current_time = time.get_ticks()
                     
                     if not first_archer_spawned:
-                        new_archer = Archer("Skeleton_Archer/Idle.png", -200, 590, 128, 128, "Skeleton_Archer")
+                        new_archer = Archer(resource_path("images/Skeleton_Archer/Idle.png"), -200, 590, 128, 128, "Skeleton_Archer")
                         new_archer.spawn("Skeleton_Archer", 65 * wave)
                         new_archer.resize(200, 200)
                         archers.append(new_archer)
@@ -360,7 +368,7 @@ while True:
 
                     elif archer_current_time - archer_last_spawn_time >= 45000:
                         
-                        new_archer = Archer("Skeleton_Archer/Idle.png", -200, 590, 128, 128, "Skeleton_Archer")
+                        new_archer = Archer(resource_path("images/Skeleton_Archer/Idle.png"), -200, 590, 128, 128, "Skeleton_Archer")
                         new_archer.spawn("Skeleton_Archer", 65 * wave)
                         new_archer.resize(200, 200)
                         archers.append(new_archer)
@@ -371,7 +379,7 @@ while True:
                     warrior_current_time = time.get_ticks()
 
                     if not first_warrior_spawned:
-                        new_warrior = Warrior("Skeleton_Warrior/Idle.png", -200, 590, 128, 128, "Skeleton_Warrior")
+                        new_warrior = Warrior(resource_path("images/Skeleton_Warrior/Idle.png"), -200, 590, 128, 128, "Skeleton_Warrior")
                         new_warrior.spawn("Skeleton_Warrior", 70 * wave)
                         new_warrior.resize(200, 200)
                         warriors.append(new_warrior)
@@ -382,7 +390,7 @@ while True:
 
                     elif warrior_current_time - warrior_last_spawn_time >= 40000:
 
-                        new_warrior = Warrior("Skeleton_Warrior/Idle.png", -200, 590, 128, 128, "Skeleton_Warrior")
+                        new_warrior = Warrior(resource_path("images/Skeleton_Warrior/Idle.png"), -200, 590, 128, 128, "Skeleton_Warrior")
                         new_warrior.spawn("Skeleton_Warrior", 70 * wave)
                         new_warrior.resize(200, 200)
                         warriors.append(new_warrior)
@@ -460,7 +468,7 @@ while True:
 
                 if not moved and knight.on_ground and not knight.attacking and not knight.defending and not getattr(knight, "dead", False) and not getattr(knight, "took_damage", False):
                     try:
-                        knight.change_animation(f"{character}/Idle.png", 128, 128)
+                        knight.change_animation(resource_path(f"images/{character}/Idle.png"), 128, 128)
                         knight.resize(200, 200)
                     except Exception:
                         pass
@@ -543,8 +551,9 @@ while True:
                 hearts_manager.update(current_time)
                 if len(hearts_manager.collectables) == 0:
                     heart_spawned = False
-                if hearts_manager.pick_up(knight.get_hitbox()):
+                if hearts_manager.pick_up(knight.get_hitbox()) or hearts_manager.lives == 5:
                     heart_spawned = False
+                    heart_spawned_timer_started = False
                 hearts_manager.draw(window)
 
                 for arrow in arrows:
@@ -705,7 +714,7 @@ while True:
                         if getattr(knight, "dead", False) and getattr(knight, "play_once_done", False):
                             if not highscore_written:
                                 try:
-                                    with open("highscore.txt", "a") as file:
+                                    with open(resource_path("highscore.txt"), "a") as file:
                                         file.write("\n" + str(scorenum))
                                 except Exception:
                                     pass
@@ -760,7 +769,7 @@ while True:
                                     hurt_sound.play()
                                     knight.took_damage = True
                                     try:
-                                        knight.change_animation(f"{character}/Hurt.png", 128, 128, play_once=True)
+                                        knight.change_animation(resource_path(f"images/{character}/Hurt.png"), 128, 128, play_once=True)
                                     except Exception:
                                         pass
                                     knight.resize(200, 200)
@@ -786,7 +795,7 @@ while True:
                 if getattr(knight, "dead", False) and getattr(knight, "play_once_done", False):
                     if not highscore_written:
                         try:
-                            with open("highscore.txt", "a") as file:
+                            with open(resource_path("highscore.txt"), "a") as file:
                                 file.write("\n" + str(scorenum))
                         except Exception:
                             pass
@@ -804,11 +813,14 @@ while True:
                         knight.attacking = False
                         knight.play_once_done = False
 
+                if getattr(knight, "took_damage", False) and getattr(knight, "play_once_done", False):
+                    knight.took_damage = False
+
                 if len(skeletons) == 0:
                     skeleton_healthbars.clear()
                     live_skeletons = max_skeletons
                     for i in range(max_skeletons):
-                        skeleton = Skeleton("Skeleton_Spearman/Idle.png", -200, 590, 128, 128, "Skeleton_Spearman")
+                        skeleton = Skeleton(resource_path("images/Skeleton_Spearman/Idle.png"), -200, 590, 128, 128, "Skeleton_Spearman")
                         skeleton.spawn("Skeleton_Spearman", 60 * wave)
                         skeletons.append(skeleton)
                     for skeleton in skeletons:
@@ -825,7 +837,7 @@ while True:
 
                 if len(archers) == 0:
                     archer_healthbars.clear()
-                    archer = Archer("Skeleton_Archer/Idle.png", -200, 590, 128, 128, "Skeleton_Archer")
+                    archer = Archer(resource_path("images/Skeleton_Archer/Idle.png"), -200, 590, 128, 128, "Skeleton_Archer")
                     archer.spawn("Skeleton_Archer", 65 * wave)
                     archers.append(archer)
                     archer_healthbar = Healthbars(archer.rect.x + 75, archer.rect.y + 90, 50, 7)
@@ -833,7 +845,7 @@ while True:
 
                 if len(warriors) == 0:
                     warrior_healthbars.clear()
-                    warrior = Warrior("Skeleton_Warrior/Idle.png", -200, 590, 128, 128, "Skeleton_Warrior")
+                    warrior = Warrior(resource_path("images/Skeleton_Warrior/Idle.png"), -200, 590, 128, 128, "Skeleton_Warrior")
                     warrior.spawn("Skeleton_Warrior", 70 * wave)
                     warriors.append(warrior)
                     warrior_healthbar = Healthbars(warrior.rect.x + 75, warrior.rect.y + 90, 50, 7)

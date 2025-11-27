@@ -2,11 +2,12 @@ from StillImage import *
 import json
 import random
 import math
+from ResourceManager import *
 
 init()
 mixer.init()
 
-health_sound = mixer.Sound("health_sound.mp3")
+health_sound = mixer.Sound(resource_path("sounds/health_sound.mp3"))
 health_sound.set_volume(0.1)
 
 class Hearts():
@@ -26,11 +27,11 @@ class Hearts():
         self.COLLECTABLE_LIFETIME = 10000
 
         for i in range(5):
-            heart = StillImage(self.HEART_X_BASE + i * self.HEART_SPACING, 0, 45, 45, "hearts.png")
+            heart = StillImage(self.HEART_X_BASE + i * self.HEART_SPACING, 0, 45, 45, resource_path("images/hearts.png"))
             self.hearts.append(heart)
 
     def spawn_collectable(self, current_time):
-        new_heart = StillImage(random.randint(-117, 710), random.choice([600, 715]), 45, 45, "hearts.png")
+        new_heart = StillImage(random.randint(-117, 710), random.choice([600, 715]), 45, 45, resource_path("images/hearts.png"))
         self.collectables.append({
                 "obj": new_heart,
                 "spawn": current_time
@@ -69,7 +70,7 @@ class Hearts():
                 if self.lives < 5:
                     self.lives += 1
                     new_x = self.HEART_X_BASE + (self.lives - 1) * self.HEART_SPACING
-                    self.hearts.append(StillImage(new_x, 0, 45, 45, "hearts.png"))
+                    self.hearts.append(StillImage(new_x, 0, 45, 45, resource_path("images/hearts.png")))
                 self.collectables.remove(item)
                 return False
             
@@ -91,12 +92,12 @@ def lerp_colour(c1, c2, t):
         int(c1[2] + (c2[2] - c1[2]) * t)
     )
 
-potion_collect = mixer.Sound("potion_sound.mp3")
+potion_collect = mixer.Sound(resource_path("sounds/potion_sound.mp3"))
 potion_collect.set_volume(0.1)
 
 class Potions():
     def __init__(self):
-        self.potion = StillImage(random.randint(0, 710), random.choice([600, 715]), 70, 70, "strength_potion.png")
+        self.potion = StillImage(random.randint(0, 710), random.choice([600, 715]), 70, 70, resource_path("images/strength_potion.png"))
         self.draw_or_not = False
         self.active = False
         self.effect_duration = 15000
@@ -109,7 +110,7 @@ class Potions():
         self.follow_knight = False
 
     def spawn_collectable(self):
-        self.potion = StillImage(random.randint(0, 710), random.choice([600, 715]), 70, 70, "strength_potion.png")
+        self.potion = StillImage(random.randint(0, 710), random.choice([600, 715]), 70, 70, resource_path("images/strength_potion.png"))
         self.draw_or_not = True
         self.active = False
         self.start_time = None
