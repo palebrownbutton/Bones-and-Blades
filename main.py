@@ -323,7 +323,6 @@ while True:
 
                 if not has_updated_stats:
                     has_updated_stats = True
-                    print(knight.strength, knight.hp)
 
                 if current_time - heart_spawn_time > lives_rate and hearts_manager.lives < 5 and not heart_spawned:
                     heart_spawned = True
