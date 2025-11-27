@@ -182,6 +182,8 @@ with open ("upgrades.json") as file:
     data = json.load(file)[1]
     lives_rate = data["upgrade_level"]["life_spawn_time_upgrade"]
 
+heart_spawned = False
+
 strength_spawn_time = time.get_ticks()
 
 try:
@@ -309,8 +311,10 @@ while True:
             if not paused_game:
 
                 current_time = time.get_ticks() - paused_time
+                print(current_time)
 
-                if current_time - heart_spawn_time > lives_rate and hearts_manager.lives < 5:
+                if current_time - heart_spawn_time > 10000 and hearts_manager.lives < 5 and not heart_spawned:
+                    heart_spawned = True
                     heart_spawn_time = current_time
                     hearts_manager.spawn_collectable(current_time)
 
@@ -526,7 +530,10 @@ while True:
                         strength_spawn_time = current_time
 
                 hearts_manager.update(current_time)
-                hearts_manager.pick_up(knight.get_hitbox())
+                if len(hearts_manager.collectables) == 0:
+                    heart_spawned = False
+                if hearts_manager.pick_up(knight.get_hitbox()):
+                    heart_spawned = False
                 hearts_manager.draw(window)
 
                 for arrow in arrows:

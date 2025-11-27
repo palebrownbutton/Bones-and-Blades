@@ -71,6 +71,9 @@ class Hearts():
                     new_x = self.HEART_X_BASE + (self.lives - 1) * self.HEART_SPACING
                     self.hearts.append(StillImage(new_x, 0, 45, 45, "hearts.png"))
                 self.collectables.remove(item)
+                return False
+            
+        return True
 
     def lose_a_heart(self):
          
