@@ -445,6 +445,7 @@ def upgrade_menu(window):
                 data[0]["strength"] = int(base_strength * strength_multiplier)
                 data[0]["life spawn time"] = max(1, int(base_life_spawn_time * lives_spawn_multiplier))
 
+    rendered_total_xp_text = TextRender(None, 60, (255, 255, 255), f"XP: {total_xp}")
     rendered_total_xp_text.draw(window, (615, 10))
 
     rendered_hp_text.draw(window, (350, 330))
