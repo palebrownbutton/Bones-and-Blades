@@ -5,6 +5,7 @@ from QuestReader import *
 import time as pytime
 import json
 from ResourceManager import *
+import sys
 
 font.init()
 mixer.init()
@@ -288,7 +289,9 @@ def quests_menu(window):
 
         for e in event.get():
             if e.type == QUIT:
-                exit()
+                quit()
+                sys.exit()
+
 
             elif e.type == MOUSEWHEEL:
                 scroll_y += e.y * scroll_speed
@@ -640,7 +643,9 @@ def pause_screen(window):
 
         for e in event.get():
             if e.type == QUIT:
-                exit()
+                quit()
+                sys.exit()
+
 
             elif e.type == MOUSEWHEEL:
                 scroll_y += e.y * scroll_speed

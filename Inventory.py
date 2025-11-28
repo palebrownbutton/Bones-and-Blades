@@ -46,6 +46,11 @@ wooden_sheild = StillImage(137, 600, 128, 128, resource_path("images/wooden_shie
 iron_sheild = StillImage(337, 600, 128, 128, resource_path("images/iron_shield.png"))
 diamond_sheild = StillImage(537, 600, 128, 128, resource_path("images/diamond_shield.png"))
 
+iron_sword_price = TextRender(None, 60, (255, 255, 255), f"XP: {data[2]['required_xp']['iron']}")
+diamond_sword_price = TextRender(None, 60, (255, 255, 255), f"XP: {data[2]['required_xp']['diamond']}")
+iron_sheild_price = TextRender(None, 60, (255, 255, 255), f"XP: {data[2]['required_xp']['iron']}")
+diamond_sheild_price = TextRender(None, 60, (255, 255, 255), f"XP: {data[2]['required_xp']['diamond']}")
+
 unlocked = data[2]["unlocked"]
 unlocked_keys = list(unlocked.keys())
 padlocks = []
@@ -106,6 +111,15 @@ def inventory(window, mouse_pressed):
     for padlock in padlocks:
         padlock.draw(window)
 
+    if not unlocked["iron_sword"]:
+        iron_sword_price.draw(window, (iron_sword.rect.x - 10, iron_sword.rect.y + iron_sword.rect.height - 3))
+    if not unlocked["diamond_sword"]:
+        diamond_sword_price.draw(window, (diamond_sword.rect.x - 10, diamond_sword.rect.y + diamond_sword.rect.height + 5))
+    if not unlocked["iron_sheild"]:
+        iron_sheild_price.draw(window, (iron_sheild.rect.x - 10, iron_sheild.rect.y + iron_sheild.rect.height + 5))
+    if not unlocked["diamond_sheild"]:
+        diamond_sheild_price.draw(window, (diamond_sheild.rect.x - 10, diamond_sheild.rect.y + diamond_sheild.rect.height + 5))
+
     if (mouse_x >= wooden_sword.rect.x and mouse_x <= wooden_sword.rect.x + wooden_sword.rect.width and mouse_y >= wooden_sword.rect.y and mouse_y <= wooden_sword.rect.y + wooden_sword.rect.height):
         if current_mouse_pressed:
 
@@ -120,12 +134,36 @@ def inventory(window, mouse_pressed):
             knight_custom.strength = data[2]["bonuses"]["iron"]
             data[2]["type"]["sword"] = "iron"
 
+        if not unlocked["iron_sword"] and current_mouse_pressed:
+            if data[1]["total_xp"] >= data[2]["required_xp"]["iron"]:
+                unlocked["iron_sword"] = True
+                data[1]["total_xp"] -= data[2]["required_xp"]["iron"]
+                padlocks.clear()
+                for unlocked_key in ["iron_sword", "diamond_sword", "iron_sheild", "diamond_sheild"]:
+                    if not unlocked[unlocked_key]:
+                        x, y = grid_positions[unlocked_key]
+                        padlock = StillImage(x, y, 200, 200, resource_path("images/padlock.png"))
+                        padlock.set_alpha(90)
+                        padlocks.append(padlock)
+
     if (mouse_x >= diamond_sword.rect.x and mouse_x <= diamond_sword.rect.x + diamond_sword.rect.width and mouse_y >= diamond_sword.rect.y and mouse_y <= diamond_sword.rect.y + diamond_sword.rect.height):
         if current_mouse_pressed and unlocked["diamond_sword"]:
 
             knight_custom.change_item("diamond", knight_custom.sheild)
             knight_custom.strength = data[2]["bonuses"]["diamond"]
             data[2]["type"]["sword"] = "diamond"
+
+        if not unlocked["diamond_sword"] and current_mouse_pressed:
+            if data[1]["total_xp"] >= data[2]["required_xp"]["diamond"]:
+                unlocked["diamond_sword"] = True
+                data[1]["total_xp"] -= data[2]["required_xp"]["diamond"]
+                padlocks.clear()
+                for unlocked_key in ["iron_sword", "diamond_sword", "iron_sheild", "diamond_sheild"]:
+                    if not unlocked[unlocked_key]:
+                        x, y = grid_positions[unlocked_key]
+                        padlock = StillImage(x, y, 200, 200, resource_path("images/padlock.png"))
+                        padlock.set_alpha(90)
+                        padlocks.append(padlock)
 
     if (mouse_x >= wooden_sheild.rect.x and mouse_x <= wooden_sheild.rect.x + wooden_sheild.rect.width and mouse_y >= wooden_sheild.rect.y and mouse_y <= wooden_sheild.rect.y + wooden_sheild.rect.height):
         if current_mouse_pressed:
@@ -141,6 +179,18 @@ def inventory(window, mouse_pressed):
             knight_custom.hp = data[2]["bonuses"]["iron"]
             data[2]["type"]["sheild"] = "iron"
 
+        if not unlocked["iron_sheild"] and current_mouse_pressed:
+            if data[1]["total_xp"] >= data[2]["required_xp"]["iron"]:
+                unlocked["iron_sheild"] = True
+                data[1]["total_xp"] -= data[2]["required_xp"]["iron"]
+                padlocks.clear()
+                for unlocked_key in ["iron_sword", "diamond_sword", "iron_sheild", "diamond_sheild"]:
+                    if not unlocked[unlocked_key]:
+                        x, y = grid_positions[unlocked_key]
+                        padlock = StillImage(x, y, 200, 200, resource_path("images/padlock.png"))
+                        padlock.set_alpha(90)
+                        padlocks.append(padlock)
+
     if (mouse_x >= diamond_sheild.rect.x and mouse_x <= diamond_sheild.rect.x + diamond_sheild.rect.width and mouse_y >= diamond_sheild.rect.y and mouse_y <= diamond_sheild.rect.y + diamond_sheild.rect.height):
         if current_mouse_pressed and unlocked["diamond_sheild"]:
 
@@ -148,8 +198,24 @@ def inventory(window, mouse_pressed):
             knight_custom.hp = data[2]["bonuses"]["diamond"]
             data[2]["type"]["sheild"] = "diamond"
 
+        if not unlocked["diamond_sheild"] and current_mouse_pressed:
+            if data[1]["total_xp"] >= data[2]["required_xp"]["diamond"]:
+                unlocked["diamond_sheild"] = True
+                data[1]["total_xp"] -= data[2]["required_xp"]["diamond"]
+                padlocks.clear()
+                for unlocked_key in ["iron_sword", "diamond_sword", "iron_sheild", "diamond_sheild"]:
+                    if not unlocked[unlocked_key]:
+                        x, y = grid_positions[unlocked_key]
+                        padlock = StillImage(x, y, 200, 200, resource_path("images/padlock.png"))
+                        padlock.set_alpha(90)
+                        padlocks.append(padlock)
+
     data[0]["strength"] = base_strength + knight_custom.strength
     data[0]["hp"] = base_hp + knight_custom.hp
+    data[2]["unlocked"]["iron_sword"] = unlocked["iron_sword"]
+    data[2]["unlocked"]["diamond_sword"] = unlocked["diamond_sword"]
+    data[2]["unlocked"]["iron_sheild"] = unlocked["iron_sheild"]
+    data[2]["unlocked"]["diamond_sheild"] = unlocked["diamond_sheild"]
 
     if (mouse_x >= back_arrow.rect.x and mouse_x <= back_arrow.rect.x + back_arrow.rect.width and mouse_y >= back_arrow.rect.y and mouse_y <= back_arrow.rect.y + back_arrow.rect.height) and click:
         with open (resource_path("upgrades.json"), "w") as file:

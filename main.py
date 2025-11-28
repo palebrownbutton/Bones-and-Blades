@@ -11,6 +11,7 @@ from EnemyMovement import *
 from ImageEffects import *
 from Collectables import *
 from ResourceManager import *
+import sys
 
 init()
 font.init()
@@ -81,12 +82,12 @@ archers_active = False
 background = StillImage(0, 0, 800, 800, resource_path("images/background1.png"))
 background_switched = False
 
-with open("quest_list.json", "r") as file:
+with open(resource_path("quest_list.json"), "r") as file:
     data = json.load(file)
     data["9"]["objectives"]["wavesDefeated"] = 0
     data["5"]["objectives"]["wavesDefeated"] = 0
 
-with open("quest_list.json", "w") as file:
+with open(resource_path("quest_list.json"), "w") as file:
     json.dump(data, file, indent=2)
 
 has_updated_stats = False
@@ -165,7 +166,7 @@ def game_reset():
     for quest in quests.values():
         if "wavesDefeated" in quest["objectives"]:
             quest["objectives"]["wavesDefeated"] = 0
-    with open ("quest_list.json", "w") as file:
+    with open (resource_path("quest_list.json"), "w") as file:
         json.dump(quests, file, indent=2)
 
 is_home = True
@@ -235,7 +236,9 @@ while True:
 
     for e in event.get():
         if e.type == QUIT:
-            exit()
+            quit()
+            sys.exit()
+
 
     dt = clock.tick(60)
 
