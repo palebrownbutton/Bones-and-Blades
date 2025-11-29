@@ -60,11 +60,13 @@ skeleton_current_wave = 0
 archer_current_wave = 0
 warrior_current_wave = 0
 
-xp = 0
+with open (resource_path("upgrades.json"), "r") as file:
+    data = json.load(file)
+    xp = data[1].get("total_xp", 0)
 
 def quest_update(enemy_type, direction, wave, current_archers, current_skeletons, lost_a_heart, current_warriors):
 
-    global quest, quests_levels, skeleton_current_wave, archer_current_wave, xp, warrior_current_wave
+    global quest, quests_levels, skeleton_current_wave, archer_current_wave, xp, warrior_current_wave, data
 
     for quest_id, quest in quests.items():
         quest_level = quests_levels[quest_id]
@@ -168,10 +170,17 @@ def quest_update(enemy_type, direction, wave, current_archers, current_skeletons
     with open (resource_path("quest_list.json"), "w") as file:
         json.dump({str(k): v for k, v in quests.items()}, file, indent=2)
 
-    
-    with open(resource_path("upgrades.json"), "r+") as file:
-        data = json.load(file)
-        data[1]["total_xp"] = xp
-        file.seek(0)
-        json.dump(data, file, indent=4)
-        file.truncate()
+    try:
+        with open(resource_path("upgrades.json"), "r") as f:
+            file_data = json.load(f)
+    except Exception:
+        file_data = [{}, {}]
+
+    if isinstance(file_data, list) and len(file_data) > 1 and isinstance(file_data[1], dict):
+        file_data[1]["total_xp"] = xp
+    else:
+        file_data.setdefault(1, {})
+        file_data[1]["total_xp"] = xp
+
+    with open(resource_path("upgrades.json"), "w") as f:
+        json.dump(file_data, f, indent=4)
