@@ -722,6 +722,15 @@ while True:
                                 except Exception:
                                     pass
                                 highscore_written = True
+                                try:
+                                    highscore = max(highscore, scorenum)
+                                except Exception:
+                                    highscore = scorenum
+                                try:
+                                    StartScreen.rendered_highscore = StartScreen.TextRender(None, 50, (255, 255, 255), f"High Score: {highscore}")
+                                except Exception:
+                                    pass
+                                
                             ignore_return = True
                             is_home = None
                             StartScreen.ignore_return_local = True
@@ -803,6 +812,15 @@ while True:
                         except Exception:
                             pass
                         highscore_written = True
+                        # Update runtime highscore and refresh StartScreen display
+                        try:
+                            highscore = max(highscore, scorenum)
+                        except Exception:
+                            highscore = scorenum
+                        try:
+                            StartScreen.rendered_highscore = StartScreen.TextRender(None, 50, (255, 255, 255), f"High Score: {highscore}")
+                        except Exception:
+                            pass
                     ignore_return = True
                     is_home = None
                     StartScreen.ignore_return_local = True
