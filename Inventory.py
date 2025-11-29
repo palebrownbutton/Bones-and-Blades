@@ -89,7 +89,13 @@ mouse_was_pressed = False
 inventory_mouse_consumed = False
 
 def inventory(window, mouse_pressed):
-    global mouse_was_pressed, inventory_mouse_consumed, base_strength, base_hp
+    global mouse_was_pressed, inventory_mouse_consumed, base_strength, base_hp, data
+
+    try:
+        with open(resource_path("upgrades.json"), "r") as f:
+            data = json.load(f)
+    except Exception:
+        pass
 
     mouse_x, mouse_y = mouse.get_pos()
     current_mouse_pressed = mouse.get_pressed()[0]
@@ -218,8 +224,25 @@ def inventory(window, mouse_pressed):
     data[2]["unlocked"]["diamond_sheild"] = unlocked["diamond_sheild"]
 
     if (mouse_x >= back_arrow.rect.x and mouse_x <= back_arrow.rect.x + back_arrow.rect.width and mouse_y >= back_arrow.rect.y and mouse_y <= back_arrow.rect.y + back_arrow.rect.height) and click:
-        with open (resource_path("upgrades.json"), "w") as file:
-            json.dump(data, file, indent=4)
+        
+        try:
+            with open(resource_path("upgrades.json"), "r") as f:
+                current = json.load(f)
+        except Exception:
+            current = None
+
+        if isinstance(current, list) and len(current) > 2:
+            if not isinstance(current[1], dict):
+                current[1] = {}
+            current[0] = data[0]
+            current[1].update(data[1])
+            current[2] = data[2]
+            to_write = current
+        else:
+            to_write = data
+
+        with open(resource_path("upgrades.json"), "w") as file:
+            json.dump(to_write, file, indent=4)
         
         mouse_was_pressed = current_mouse_pressed
         inventory_mouse_consumed = True

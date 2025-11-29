@@ -379,6 +379,13 @@ benefit_cooldown = False
 def upgrade_menu(window):
     global hp_upgrade_level, strength_upgrade_level, lives_rate_upgrade_level, hp_required_xp, strength_required_xp, lives_rate_required_xp, rendered_total_xp_text, data, total_xp, benefit_cooldown
 
+    try:
+        with open(resource_path("upgrades.json"), "r") as f:
+            data = json.load(f)
+            total_xp = data[1].get("total_xp", 0)
+    except Exception:
+        pass
+
     mouse_x, mouse_y = mouse.get_pos()
     mouse_pressed = mouse.get_pressed()[0]
 
@@ -425,6 +432,7 @@ def upgrade_menu(window):
 
                 benefit_cooldown = True
                 total_xp -= cost
+                data[1]["total_xp"] = total_xp
 
                 if idx == 0 and strength_upgrade_level <= 10:
                     strength_upgrade_level += 1
@@ -432,6 +440,26 @@ def upgrade_menu(window):
                     hp_upgrade_level += 1
                 elif idx == 2 and lives_rate_upgrade_level <= 10:
                     lives_rate_upgrade_level += 1
+
+                try:
+                    with open(resource_path("upgrades.json"), "r") as f:
+                        current = json.load(f)
+                except Exception:
+                    current = None
+
+                if isinstance(current, list) and len(current) > 2:
+                    if not isinstance(current[1], dict):
+                        current[1] = {}
+                    current[0] = data[0]
+                    current[1].update(data[1])
+                    current[2] = data[2]
+                    to_write = current
+                else:
+                    to_write = data
+
+                with open(resource_path("upgrades.json"), "w") as file:
+                    json.dump(to_write, file, indent=4)
+
 
                 base_hp = 50
                 base_strength = 10
@@ -488,12 +516,24 @@ def upgrade_menu(window):
     data[1]["upgrade_level"]["life_spawn_time_upgrade"] = lives_rate_upgrade_level
     data[1]["total_xp"] = total_xp
 
-    with open(resource_path("upgrades.json"), "w") as file:
-        json.dump(data, file, indent=4)
+    try:
+        with open(resource_path("upgrades.json"), "r") as f:
+            current = json.load(f)
+    except Exception:
+        current = None
 
-    with open(resource_path("upgrades.json"), "r") as file:
-        data = json.load(file)
-        total_xp = data[1]["total_xp"]
+    if isinstance(current, list) and len(current) > 2:
+        if not isinstance(current[1], dict):
+            current[1] = {}
+        current[0] = data[0]
+        current[1].update(data[1])
+        current[2] = data[2]
+        to_write = current
+    else:
+        to_write = data
+
+    with open(resource_path("upgrades.json"), "w") as file:
+        json.dump(to_write, file, indent=4)
 
     recalc_upgrade_text()
     rendered_total_xp_text = TextRender(None, 60, (255, 255, 255), f"XP: {total_xp}")
